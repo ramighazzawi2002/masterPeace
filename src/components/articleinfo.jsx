@@ -1,87 +1,116 @@
-function ArticleInfo() {
-  return (
-    <div class="bg-background text-foreground min-h-screen p-4">
-      <header class="flex justify-between items-center py-4 border-b border-border">
-        <button class="bg-secondary text-secondary-foreground px-4 py-2 rounded">
-          تسجيل الدخول
-        </button>
-        <nav class="flex space-x-4">
-          <a href="#" class="text-muted-foreground">
-            الصفحة الرئيسية
-          </a>
-          <a href="#" class="text-muted-foreground">
-            قصص
-          </a>
-          <a href="#" class="text-muted-foreground">
-            ثقافة
-          </a>
-          <a href="#" class="text-muted-foreground">
-            تواصل معنا
-          </a>
-        </nav>
-        <div class="w-8 h-8 bg-muted rounded-full"></div>
-      </header>
-      <main class="max-w-4xl mx-auto mt-8">
-        <h1 class="text-3xl font-bold text-center mb-4">فن النسيج في الأردن</h1>
-        <img
-          src="https://placehold.co/800x400"
-          alt="Embroidery art in Jordan"
-          class="w-full mb-4"
-        />
-        <p class="text-lg leading-relaxed mb-8">
-          فن النسيج هو أحد أقدم الفنون في الأردن. يتمثل هذا الفن في عمل قطع
-          منسوجة بألوان زاهية وأشكال فنية تعكس تراث وثقافة البلاد. وقد ازدهرت
-          هذه الحرفة على مر العصور، حيث كانت النساء في القرى يعملن على إنتاج
-          الأقمشة والأغطية المطرزة بأيديهن. وتعتبر هذه الحرفة من الفنون
-          التقليدية التي تعبر عن الهوية الوطنية الأردنية.
-        </p>
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">التعليقات</h2>
-          <div class="space-y-4">
-            <div class="flex items-start space-x-4">
-              <div class="w-10 h-10 bg-muted rounded-full"></div>
-              <div>
-                <p class="font-bold">علي</p>
-                <p>هذا مقال رائع عن النسيج، أحببت التفاصيل المقدمة!</p>
-              </div>
-            </div>
-            <div class="flex items-start space-x-4">
-              <div class="w-10 h-10 bg-muted rounded-full"></div>
-              <div>
-                <p class="font-bold">سارة</p>
-                <p>شكراً للمعلومات المفيدة، النسيج فن له مكانة خاصة.</p>
-              </div>
-            </div>
-            <div class="flex items-start space-x-4">
-              <div class="w-10 h-10 bg-muted rounded-full"></div>
-              <div>
-                <p class="font-bold">محمد</p>
-                <p>
-                  أحببت الصور المرفوعة في المقال، تعكس جمال التراث الأردني في فن
-                  النسيج.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+import Header from "./header";
+import Footer from "./footer";
+import { useState, useRef } from "react";
+import profileImage from "../img/profile-circle-icon-512x512-zxne30hp.png";
+import { Rating, textarea, Textarea } from "@material-tailwind/react";
 
-        <section>
-          <textarea
-            class="w-full p-4 border border-border rounded mb-4"
-            rows="4"
-            placeholder="أضف تعليقك"
-          ></textarea>
-          <button class="bg-primary text-primary-foreground px-4 py-2 rounded">
-            إرسال تعليق
-          </button>
-        </section>
-      </main>
-      <footer class="text-center py-4 border-t border-border mt-8">
-        <p class="text-sm text-muted-foreground">
-          © 2023 Jordanian Heritage Site. All rights reserved.
-        </p>
-      </footer>
-    </div>
+function ArticleInfo() {
+  const textArea = useRef();
+  const [ratingValue, setRatingValue] = useState(0);
+
+  const addComment = () => {
+    // setComments(textArea.current.value);
+    // console.log(comments);
+    setComments([
+      ...comments,
+
+      {
+        id: comments.length + 1,
+        text: textArea.current.querySelector("textarea").value,
+        rating: ratingValue,
+        author: `مستخدم ${comments.length + 1}`,
+      },
+    ]);
+    console.log(comments);
+  };
+
+  const [comments, setComments] = useState([
+    {
+      id: 1,
+      author: "علي",
+      text: "هذا مقال رائع حول الفسيفساء. أحببت التفاصيل المقدمة!",
+      rating: 5,
+    },
+    {
+      id: 2,
+      author: "سارة",
+      text: "شكراً للمعلومات المفيدة. الفسيفساء فن هي مذهل حقاً.",
+      rating: 4,
+    },
+    {
+      id: 3,
+      author: "محمد رمضان",
+      text: "أحببت الصور الموجودة في المقال. تجعلني أرغب في زيارة الأردن لرؤية الفسيفساء بنفسي.",
+      rating: 3,
+    },
+  ]);
+  return (
+    <>
+      <Header />
+      <div className="max-w-[80rem] my-28 mx-auto">
+        <div className="rounded-lg p-4 sm:p-8">
+          <h1 className="text-4xl font-bold text-customBrown mb-7">
+            فن الفسيفساء في الأردن
+          </h1>
+          <img
+            src="./src/img/card-img.jpg"
+            alt="صورة المقال"
+            className="h-[28rem] w-full object-cover rounded-lg mb-7"
+          />
+          <p className="text-xl text-right mb-7">
+            الفن الفسيفسائي هو أحد أقدم الفنون التي عرفتها البشرية. يتمثل هذا
+            الفن في تجميع قطع صغيرة من الحجارة أو الزجاج أو السيراميك لتشكيل صور
+            فنية رائعة. في الأردن، يمتد تاريخ الفسيفساء إلى العصور القديمة حيث
+            يمكن العثور على العديد من الأمثلة الجميلة في المواقع الأثرية مثل
+            مادبا والبحر الميت. تعتمد تقنيات الفسيفساء على الدقة والصبر، حيث يجب
+            على الفنان ترتيب كل قطعة صغيرة بعناية لتحقيق التصميم النهائي.
+            تُستخدم الأدوات اليدوية البسيطة مثل الملاقط والمطارق الصغيرة،
+            وأحيانًا يتم رسم التصميم المبدئي على السطح قبل بدء وضع القطع.
+            الفسيفساء ليست فقط فناً جميلاً ولكنها تحمل أيضًا تاريخًا وثقافة، حيث
+            تعكس التصاميم والأنماط المستخدمة في الفسيفساء الأردنية التراث
+            الثقافي والديني للمنطقة.
+          </p>
+          <div>
+            <h2 className="text-4xl">التعليقات</h2>
+            {comments.map(comment => (
+              <div className=" p-4 rounded-lg my-7">
+                <div className="flex items-center gap-4 mb-5">
+                  <img
+                    src={profileImage}
+                    alt="صورة الملف الشخصي"
+                    className="h-12 w-12 rounded-full"
+                  />
+                  <h3 className="text-2xl font-bold">{comment.author}</h3>
+                </div>
+                <div className="flex">
+                  <Rating value={comment.rating} readonly />
+                </div>
+                <p className="text-lg">{comment.text}</p>
+              </div>
+            ))}
+            <Textarea
+              label="اضف تعليقك هنا"
+              className=" text-[20px]"
+              ref={textArea}
+            />
+
+            <div className="flex items-center">
+              <span className="ml-2 text-gray-600">التقييم:</span>
+              <Rating
+                value={ratingValue}
+                onChange={value => setRatingValue(value)}
+              />
+            </div>
+            <button
+              className="bg-customGreen text-white py-2 px-4 rounded-lg mt-4"
+              onClick={addComment}
+            >
+              إضافة تعليق
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 export default ArticleInfo;

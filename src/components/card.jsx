@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function Card({
   cardColor,
   btnColor,
@@ -6,6 +7,7 @@ function Card({
   description,
   imgSrc,
   alt,
+  btnLink,
 }) {
   return (
     <div
@@ -21,11 +23,13 @@ function Card({
         <p className="text-muted-foreground mb-4 text-customBrown">
           {description}
         </p>
-        <button
-          className={`bg-${btnColor} text-lg text-white py-2 px-4 rounded-lg w-[90%]`}
-        >
-          {btnText}
-        </button>
+        <Link to={btnLink}>
+          <button
+            className={`bg-${btnColor} text-lg text-white py-2 px-4 rounded-lg w-[90%]`}
+          >
+            {btnText}
+          </button>
+        </Link>
       </div>
     </div>
   );

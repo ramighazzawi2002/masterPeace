@@ -7,15 +7,15 @@ function ContactUs() {
   return (
     <>
       <Header />
-      <div className="flex w-[80%] mx-auto my-32">
+      <div className="flex flex-col lg:flex-row max-w-[95%] sm:max-w-[80%] mx-auto my-32">
         <div
-          className="w-[40%] h-[80h] bg-cover"
+          className="w-[100%] lg:w-[40%] h-[80vh] bg-cover"
           style={{
             backgroundImage: `linear-gradient(to right,rgb(93, 64, 55, .7), rgb(93, 64, 55,.7)),url("./src/img/petra.jpg")`,
           }}
         ></div>
-        <div className="bg-customYellow w-[60%] h-[80vh] p-7">
-          <div className="flex gap-10 my-10">
+        <div className="bg-customYellow w-[100%] lg:w-[60%] h-[80vh] p-7">
+          <div className="flex gap-10 my-10 flex-wrap md:flex-nowrap ">
             <Input
               variant="standard"
               label="الاسم الاول"
@@ -27,7 +27,7 @@ function ContactUs() {
               placeholder="الاسم الاخير"
             />
           </div>
-          <div className="flex gap-10 my-10">
+          <div className="flex flex-wrap gap-10 my-10 md:flex-nowrap">
             <Input
               variant="standard"
               label="رقم الهاتف"

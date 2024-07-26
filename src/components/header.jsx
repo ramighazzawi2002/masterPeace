@@ -23,7 +23,7 @@ function Header() {
                 ? "opacity-100 translate-x-0 visible"
                 : "opacity-0 translate-x-full invisible"
             }
-          } md:flex absolute top-0 bg-zinc-950 left-0 w-screen text-white h-screen z-50 flex-col justify-center items-center text-3xl gap-16 md:gap-7 transition-all duration-500 flex md:visible md:opacity-100 md:w-auto md:h-auto md:translate-x-0 md:static md:flex-row md:bg-transparent md:text-sm`}
+          } md:flex absolute top-0 bg-black left-0 w-screen text-white h-screen z-50 flex-col justify-center items-center text-3xl gap-16 md:gap-7 transition-all duration-500 flex md:visible md:opacity-100 md:w-auto md:h-auto md:translate-x-0 md:static md:flex-row md:bg-transparent md:text-sm`}
           >
             <button
               className={`absolute top-10 right-10 text-white md:hidden ${
