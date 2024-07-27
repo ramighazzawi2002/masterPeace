@@ -3,7 +3,7 @@ import Footer from "./footer";
 import { useState, useRef } from "react";
 import profileImage from "../img/profile-circle-icon-512x512-zxne30hp.png";
 import { Rating, textarea, Textarea } from "@material-tailwind/react";
-
+import cardImage from "../img/card-img.jpg";
 function ArticleInfo() {
   const textArea = useRef();
   const [ratingValue, setRatingValue] = useState(0);
@@ -53,7 +53,7 @@ function ArticleInfo() {
             فن الفسيفساء في الأردن
           </h1>
           <img
-            src="./src/img/card-img.jpg"
+            src={cardImage}
             alt="صورة المقال"
             className="h-[28rem] w-full object-cover rounded-lg mb-7"
           />
