@@ -2,7 +2,7 @@ import Header from "./header";
 import Footer from "./footer";
 import Card from "./card";
 import SearchBar from "./searchBar";
-
+import cardImage from "../img/card-img.jpg";
 function Products() {
   return (
     <>
@@ -16,7 +16,7 @@ function Products() {
             cardColor="#FFFFFF"
             title="فسيفساء أردنية"
             description="السعر: 20 د.أ"
-            imgSrc="./src/img/card-img.jpg"
+            imgSrc={cardImage}
             alt="صورة المقال"
             btnLink="/login"
           />

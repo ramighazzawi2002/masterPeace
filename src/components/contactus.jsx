@@ -2,7 +2,7 @@ import Header from "./header";
 import Footer from "./footer";
 import { Input } from "@material-tailwind/react";
 import { Textarea } from "@material-tailwind/react";
-
+import petra from "../img/petra.jpg";
 function ContactUs() {
   return (
     <>
@@ -11,7 +11,7 @@ function ContactUs() {
         <div
           className="w-[100%] lg:w-[40%] h-[80vh] bg-cover"
           style={{
-            backgroundImage: `linear-gradient(to right,rgb(93, 64, 55, .7), rgb(93, 64, 55,.7)),url("./src/img/petra.jpg")`,
+            backgroundImage: `linear-gradient(to right,rgb(93, 64, 55, .7), rgb(93, 64, 55,.7)),url(${petra})`,
           }}
         ></div>
         <div className="bg-customYellow w-[100%] lg:w-[60%] h-[80vh] p-7">

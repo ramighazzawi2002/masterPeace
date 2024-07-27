@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Logo from "../img/logo.png";
 function Header() {
   const [showMenu, setShowMenu] = useState(false);
   return (
@@ -15,7 +16,7 @@ function Header() {
               <span className=" w-7 h-1 block bg-white"></span>
               <span className=" w-7 h-1 block bg-white"></span>
             </div>
-            <img src="./src/img/logo.png" />
+            <img src={Logo} />
           </div>
           <ul
             className={`${

@@ -2,6 +2,7 @@ import Header from "./header";
 import Footer from "./footer";
 import SearchBar from "./searchBar";
 import Card from "./card";
+import cardImage from "../img/card-img.jpg";
 function Articles() {
   return (
     <>
@@ -15,7 +16,7 @@ function Articles() {
             cardColor="customYellow"
             title="فن الفسيفساء في الأردن"
             description="استكشف فن صناعة الفسيفساء المعقد. صمم واصنع قطعتك الخاصة باستخدام تقنيات مستوحاة من الفسيفساء الأردنية القديمة."
-            imgSrc="./src/img/card-img.jpg"
+            imgSrc={cardImage}
             alt="صورة المقال"
             btnLink="/articleinfo"
           />

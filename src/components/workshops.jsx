@@ -2,7 +2,7 @@ import Header from "./header";
 import Footer from "./footer";
 import SearchBar from "./searchBar";
 import Card from "./card";
-
+import cardImage from "../img/card-img.jpg";
 function WorkShops() {
   return (
     <>
@@ -16,7 +16,7 @@ function WorkShops() {
             cardColor="#FFFFFF"
             title="المأكولات الأردنية التقليدية"
             description="انضم إلينا لتجربة عملية في إعداد الأطباق الأردنية الأصيلة. من المنسف إلى المقلوبة، انغمس في نكهات الأردن."
-            imgSrc="./src/img/card-img.jpg"
+            imgSrc={cardImage}
             alt="صورة المقال"
             btnLink="/workshopinfo"
           />

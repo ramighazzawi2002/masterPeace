@@ -1,13 +1,14 @@
 import Header from "./header";
 import Footer from "./footer";
 import Button from "./login&&signup/button";
+import cardImage from "../img/card-img.jpg";
 function WorkShopInfo() {
   return (
     <>
       <Header />
       <div className="mx-auto max-w-[50rem] mt-28 p-5 mb-16 shadow-lg">
         <img
-          src="./src/img/card-img.jpg"
+          src={cardImage}
           alt="petra"
           className="block mx-auto w-[100%] mb-6"
         />

@@ -11,7 +11,7 @@ function Card({
 }) {
   return (
     <div
-      className={`bg-card text-center rounded-lg shadow w-[80%] mx-auto  p-4 bg-[${cardColor}]`}
+      className={`text-center rounded-lg shadow w-[80%] mx-auto  p-4 bg-[${cardColor}]`}
     >
       <img
         src={imgSrc}
