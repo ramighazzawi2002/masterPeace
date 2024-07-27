@@ -14,7 +14,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {
   return (
     <>
-      <Router>
+      <Router basename="/masterPiece/">
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/workshops" element={<WorkShops />} />
