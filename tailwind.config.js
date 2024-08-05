@@ -18,13 +18,3 @@ module.exports = withMT({
   },
   plugins: [],
 });
-
-// module.exports = {
-//   content: ["./src/**/*.{js,jsx,ts,tsx,html}"],
-//   theme: {
-//     extend: {
-//       colors: { customRed: "#D32F2F" },
-//     },
-//   },
-//   plugins: [],
-// };

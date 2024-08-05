@@ -2,7 +2,7 @@ import Header from "./header";
 import Footer from "./footer";
 import { useState, useRef } from "react";
 import profileImage from "../img/profile-circle-icon-512x512-zxne30hp.png";
-import { Rating, textarea, Textarea } from "@material-tailwind/react";
+import { Rating, Textarea } from "@material-tailwind/react";
 import cardImage from "../img/card-img.jpg";
 function ArticleInfo() {
   const textArea = useRef();

@@ -18,7 +18,7 @@ function Products() {
             description="السعر: 20 د.أ"
             imgSrc={cardImage}
             alt="صورة المقال"
-            btnLink="/login"
+            btnLink="/productinfo"
           />
         ))}
       </div>

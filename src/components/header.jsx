@@ -35,7 +35,7 @@ function Header() {
               X
             </button>
             <li>
-              <Link to="/home">الصفحة الرئيسية</Link>
+              <Link to="/">الصفحة الرئيسية</Link>
             </li>
             <li>
               <Link to="/workshops">ورشات</Link>
