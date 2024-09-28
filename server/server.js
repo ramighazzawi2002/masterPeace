@@ -10,6 +10,7 @@ const cartRouter = require("./routes/cartRouter");
 const orderItemRouter = require("./routes/orderItemRouter");
 const cors = require("cors");
 const express = require("express");
+const path = require("path");
 require("dotenv").config();
 
 const cookieParser = require("cookie-parser");
@@ -24,6 +25,7 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Article Router
 app.use("/article", article);

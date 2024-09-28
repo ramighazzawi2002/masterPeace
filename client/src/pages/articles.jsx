@@ -39,8 +39,8 @@ function Articles() {
               btnText="اقرا المزيد"
               cardColor="customYellow"
               title={article.title}
-              description={article.brief}
-              imgSrc={cardImage}
+              description={article.breif}
+              imgSrc={`http://localhost:5000/uploads/${article.image}`}
               alt="صورة المقال"
               btnLink={`/articleinfo/${article.id}`}
             />

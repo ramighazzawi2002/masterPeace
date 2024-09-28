@@ -69,6 +69,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      image: {
+        type: DataTypes.STRING,
+      },
       owner_id: {
         type: DataTypes.INTEGER,
       },

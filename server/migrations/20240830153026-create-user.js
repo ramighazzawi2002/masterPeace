@@ -28,6 +28,10 @@ module.exports = {
         allowNull: false,
         defaultValue: "local",
       },
+      image: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

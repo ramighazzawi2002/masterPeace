@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const { Article, Comment, User } = require("../models");
 const jwt = require("jsonwebtoken");
 const getArticles = async (req, res) => {
@@ -5,8 +6,12 @@ const getArticles = async (req, res) => {
     const page = req.query.page || 1;
     const limit = req.query.limit || 10;
     const skip = (page - 1) * limit;
-    const articlesCount = await Article.count();
-    const articles = await Article.findAll({ limit, offset: skip });
+    const articlesCount = await Article.count({ where: { is_approved: true } });
+    const articles = await Article.findAll({
+      where: { is_approved: true },
+      limit,
+      offset: skip,
+    });
     res.json({
       data: articles,
       totalArticles: articlesCount,
@@ -101,10 +106,60 @@ const deleteComment = async (req, res) => {
   }
 };
 
+const addArticle = async (req, res) => {
+  try {
+    const author_id = req.user;
+    const { title, content, breif } = req.body;
+    const image = req.file.filename;
+    const article = await Article.create({
+      title,
+      content,
+      breif,
+      image,
+      author_id,
+    });
+    res.json(article);
+  } catch (error) {
+    console.error("Error adding article:", error);
+    res.status(500).json({ message: "Error adding article" });
+  }
+};
+
+const getArticleByUserID = async (req, res) => {
+  try {
+    const author_id = req.user;
+    const articles = await Article.findAll({
+      where: { author_id },
+    });
+    res.json(articles);
+  } catch (error) {
+    console.error("Error fetching articles:", error);
+    res.status(500).json({ message: "Error fetching articles" });
+  }
+};
+
+const updateArticle = async (req, res) => {
+  try {
+    const { id, title, content, breif } = req.body;
+
+    const article = await Article.update(
+      { title, content, breif, is_approved: false },
+      { where: { id } }
+    );
+    res.json(article);
+  } catch (error) {
+    console.error("Error updating article:", error);
+    res.status(500).json({ message: "Error updating article" });
+  }
+};
+
 module.exports = {
   getArticles,
   getArticleWithComments,
   addComment,
   editComment,
   deleteComment,
+  addArticle,
+  getArticleByUserID,
+  updateArticle,
 };

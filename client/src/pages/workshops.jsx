@@ -42,7 +42,7 @@ function WorkShops() {
               cardColor="#FFFFFF"
               title={workShop.title}
               description={workShop.description}
-              imgSrc={cardImage}
+              imgSrc={`http://localhost:5000/uploads/${workShop.image}`}
               alt="صورة المقال"
               btnLink={`/workshopinfo/${workShop.id}`}
             />

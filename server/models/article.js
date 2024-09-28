@@ -17,9 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       title: DataTypes.STRING,
       content: DataTypes.TEXT,
-      brief: DataTypes.STRING,
+      breif: DataTypes.STRING,
       author_id: DataTypes.INTEGER,
-      is_approved: DataTypes.BOOLEAN,
+      is_approved: { type: DataTypes.BOOLEAN, defaultValue: false },
+      image: DataTypes.STRING,
     },
     {
       sequelize,

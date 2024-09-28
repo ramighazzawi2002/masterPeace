@@ -22,7 +22,7 @@ const googleCallback = async (req, res) => {
       grant_type: "authorization_code",
     });
 
-    const { access_token, id_token } = data;
+    const { access_token } = data;
 
     // Use access_token or id_token to fetch user profile
     const { data: profile } = await axios.get(

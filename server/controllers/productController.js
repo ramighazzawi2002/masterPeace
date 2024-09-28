@@ -48,4 +48,18 @@ const getProductWithComments = async (req, res) => {
   res.json(products);
 };
 
-module.exports = { getAllProducts, getProductWithComments };
+const uploadProductImage = async (req, res) => {
+  const product = await Product.findOne({ where: { id: req.params.id } });
+  if (!product) {
+    return res.status(404).json({ error: "Product not found" });
+  }
+  const file = req.file;
+  if (!file) {
+    return res.status(400).json({ error: "Please upload a file" });
+  }
+  product.image = file.filename;
+  await product.save();
+  res.json(product);
+};
+
+module.exports = { getAllProducts, getProductWithComments, uploadProductImage };

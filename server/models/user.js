@@ -36,6 +36,10 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       is_admin: { type: DataTypes.BOOLEAN, defaultValue: false },
       auth_type: {
         type: DataTypes.ENUM("local", "google"),

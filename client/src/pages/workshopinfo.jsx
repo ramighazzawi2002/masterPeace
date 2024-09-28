@@ -125,7 +125,7 @@ function WorkshopInfo() {
           <Card className="overflow-hidden mt-16">
             <div className="relative h-80">
               <img
-                src={cardImage}
+                src={`http://localhost:5000/uploads/${workshop.image}`}
                 alt={workshop.title}
                 className="w-full h-full object-cover"
               />

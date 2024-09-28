@@ -244,6 +244,58 @@ const logout = async (req, res) => {
   }
 };
 
+const getProfile = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user);
+    res.json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "حدث خطأ ما" });
+  }
+};
+
+const uploadProfileImage = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user);
+    user.image = req.file.filename;
+    await user.save();
+    res.json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "حدث خطأ ما" });
+  }
+};
+
+const updateProfileData = async (req, res) => {
+  try {
+    const { username, currentPassword, newPassword, image } = req.body;
+    const user = await User.findByPk(req.user);
+    if (username) {
+      user.username = username;
+    }
+    if (image) {
+      user.image = image;
+    }
+    if (currentPassword && newPassword) {
+      const validPassword = await bcrypt.compare(
+        currentPassword,
+        user.password_hash
+      );
+      if (!validPassword) {
+        return res.status(400).json({ message: "كلمة المرور غير صحيحة" });
+      }
+      const salt = await bcrypt.genSalt(10);
+      user.password_hash = await bcrypt.hash(newPassword, salt);
+    }
+    await user.save();
+
+    res.json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "حدث خطأ ما" });
+  }
+};
+
 module.exports = {
   sendOtp,
   verifyOtp,
@@ -254,4 +306,7 @@ module.exports = {
   resetPassword,
   checkIsLoggedIn,
   logout,
+  getProfile,
+  uploadProfileImage,
+  updateProfileData,
 };

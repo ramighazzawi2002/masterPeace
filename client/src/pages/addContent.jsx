@@ -10,7 +10,8 @@ const AddContentPage = () => {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    brief: "",
+    breif: "",
+    image: null,
     description: "",
     topics_covered: [""],
     requirements: [""],
@@ -21,6 +22,7 @@ const AddContentPage = () => {
     location: "",
     benefits: [""],
     max_participants: "",
+    start_date: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -32,7 +34,8 @@ const AddContentPage = () => {
     setFormData({
       title: "",
       content: "",
-      brief: "",
+      breif: "",
+      image: null,
       description: "",
       topics_covered: [""],
       requirements: [""],
@@ -43,20 +46,28 @@ const AddContentPage = () => {
       location: "",
       benefits: [""],
       max_participants: "",
+      start_date: "",
     });
     setFieldErrors({});
   }, [contentType]);
 
   const handleChange = e => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]:
-        name === "cost" || name === "max_participants"
-          ? parseFloat(value) || ""
-          : value,
-    }));
-    validateField(name, value);
+    const { name, value, type, files } = e.target;
+    if (type === "file") {
+      setFormData(prevData => ({
+        ...prevData,
+        [name]: files[0],
+      }));
+    } else {
+      setFormData(prevData => ({
+        ...prevData,
+        [name]:
+          name === "cost" || name === "max_participants"
+            ? parseFloat(value) || ""
+            : value,
+      }));
+    }
+    validateField(name, type === "file" ? files[0] : value);
   };
 
   const handleMultiInputChange = (e, field, index) => {
@@ -94,8 +105,11 @@ const AddContentPage = () => {
       case "description":
         if (value.length < 10) error = "المحتوى يجب أن يكون 10 أحرف على الأقل";
         break;
-      case "brief":
+      case "breif":
         if (value.length < 5) error = "النبذة يجب أن تكون 5 أحرف على الأقل";
+        break;
+      case "image":
+        if (!value) error = "الصورة مطلوبة";
         break;
       case "duration":
         if (isNaN(value) || value <= 0)
@@ -114,6 +128,13 @@ const AddContentPage = () => {
       case "benefits":
         if (value.length < 2) error = "يجب أن يكون حرفين على الأقل";
         break;
+      case "start_time":
+      case "end_time":
+        if (!value) error = "الوقت مطلوب";
+        break;
+      case "start_date":
+        if (!value) error = "تاريخ البدء مطلوب";
+        break;
     }
     setFieldErrors(prev => ({ ...prev, [name]: error }));
   }, 300);
@@ -121,13 +142,14 @@ const AddContentPage = () => {
   const validateForm = () => {
     const requiredFields =
       contentType === "article"
-        ? ["title", "content", "brief"]
+        ? ["title", "content", "breif", "image"]
         : [
             "title",
             "description",
             "topics_covered",
             "requirements",
             "duration",
+            "start_date",
             "start_time",
             "end_time",
             "cost",
@@ -161,6 +183,16 @@ const AddContentPage = () => {
       return false;
     }
 
+    // Validate start time is before end time
+    if (contentType === "workshop") {
+      const startTime = new Date(`2000-01-01T${formData.start_time}`);
+      const endTime = new Date(`2000-01-01T${formData.end_time}`);
+      if (startTime >= endTime) {
+        setError("يجب أن يكون وقت البدء قبل وقت الانتهاء");
+        return false;
+      }
+    }
+
     return true;
   };
 
@@ -176,14 +208,28 @@ const AddContentPage = () => {
     setLoading(true);
     try {
       const endpoint =
-        contentType === "article" ? "/api/articles" : "/api/workshops";
-      const dataToSubmit = {
-        ...formData,
-        topics_covered: formData.topics_covered.filter(item => item !== ""),
-        requirements: formData.requirements.filter(item => item !== ""),
-        benefits: formData.benefits.filter(item => item !== ""),
-      };
-      const response = await axios.post(endpoint, dataToSubmit);
+        contentType === "article"
+          ? "http://localhost:5000/article/add-article"
+          : "http://localhost:5000/workshop/add";
+
+      const formDataToSend = new FormData();
+      Object.keys(formData).forEach(key => {
+        if (Array.isArray(formData[key])) {
+          formData[key].forEach((item, index) => {
+            formDataToSend.append(`${key}[${index}]`, item);
+          });
+        } else if (key === "image" && formData[key]) {
+          formDataToSend.append("image", formData[key]);
+        } else {
+          formDataToSend.append(key, formData[key]);
+        }
+      });
+      console.log("formDataToSend", formDataToSend);
+      const response = await axios.post(endpoint, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       setSuccess("تمت إضافة المحتوى بنجاح");
       setTimeout(() => {
         navigate("/profile");
@@ -310,18 +356,34 @@ const AddContentPage = () => {
                 <div>
                   <input
                     type="text"
-                    name="brief"
-                    value={formData.brief}
+                    name="breif"
+                    value={formData.breif}
                     onChange={handleChange}
                     placeholder="نبذة مختصرة"
                     className={`w-full p-2 border rounded ${
-                      fieldErrors.brief ? "border-red-500" : ""
+                      fieldErrors.breif ? "border-red-500" : ""
                     }`}
                     required
                   />
-                  {fieldErrors.brief && (
+                  {fieldErrors.breif && (
                     <p className="text-red-500 text-sm mt-1">
-                      {fieldErrors.brief}
+                      {fieldErrors.breif}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="file"
+                    name="image"
+                    onChange={handleChange}
+                    className={`w-full p-2 border rounded ${
+                      fieldErrors.image ? "border-red-500" : ""
+                    }`}
+                    required
+                  />
+                  {fieldErrors.image && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {fieldErrors.image}
                     </p>
                   )}
                 </div>
@@ -363,6 +425,26 @@ const AddContentPage = () => {
                   {fieldErrors.duration && (
                     <p className="text-red-500 text-sm mt-1">
                       {fieldErrors.duration}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="block mb-1 font-semibold">
+                    تاريخ البدء
+                  </label>
+                  <input
+                    type="date"
+                    name="start_date"
+                    value={formData.start_date}
+                    onChange={handleChange}
+                    className={`w-full p-2 border rounded ${
+                      fieldErrors.start_date ? "border-red-500" : ""
+                    }`}
+                    required
+                  />
+                  {fieldErrors.start_date && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {fieldErrors.start_date}
                     </p>
                   )}
                 </div>
@@ -466,11 +548,27 @@ const AddContentPage = () => {
                     </p>
                   )}
                 </div>
+                <div>
+                  <input
+                    type="file"
+                    name="image"
+                    onChange={handleChange}
+                    className={`w-full p-2 border rounded ${
+                      fieldErrors.image ? "border-red-500" : ""
+                    }`}
+                    required
+                  />
+                  {fieldErrors.image && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {fieldErrors.image}
+                    </p>
+                  )}
+                </div>
               </>
             )}
             <button
               type="submit"
-              className={`bg-amber-600 text-white px-4 py-2 rounded hover:bg-customBrown w-full ${
+              className={`bg-customBrown text-white px-4 py-2 rounded hover:bg-customBrown hover:opacity-95 w-full ${
                 loading ? "opacity-50 cursor-not-allowed" : ""
               }`}
               disabled={loading}

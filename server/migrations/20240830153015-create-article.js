@@ -15,7 +15,7 @@ module.exports = {
       content: {
         type: Sequelize.TEXT,
       },
-      brief: {
+      breif: {
         type: Sequelize.STRING,
       },
       author_id: {
@@ -23,6 +23,10 @@ module.exports = {
       },
       is_approved: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      image: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

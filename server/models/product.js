@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       stock: DataTypes.INTEGER,
       author_id: DataTypes.INTEGER,
       is_approved: DataTypes.BOOLEAN,
+      image: DataTypes.STRING,
     },
     {
       sequelize,
