@@ -35,7 +35,7 @@ const ProfilePage = () => {
   const [workshops, setWorkshops] = useState([]);
   const [editingItemId, setEditingItemId] = useState(null);
   const [editingItemType, setEditingItemType] = useState(null);
-
+  const [orderItems, setOrderItems] = useState([]);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -192,6 +192,32 @@ const ProfilePage = () => {
       }
     } catch (error) {
       console.error(`Error removing ${type}:`, error);
+    }
+  };
+
+  {
+    /*
+          const getOrderItems = async (req, res) => {
+  try {
+    const orderItems = await OrderItem.findAll({
+      where: { user_id: req.user },
+      include: Product,
+    });
+    res.json(orderItems);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "حدث خطأ ما" });
+  }
+};
+         */
+  }
+
+  const getOrderItems = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/orderItem/get");
+      setOrderItems(response.data);
+    } catch (error) {
+      console.error("Error fetching order items:", error);
     }
   };
 
@@ -417,9 +443,9 @@ const ProfilePage = () => {
           <div className="flex justify-end space-x-2">
             <button
               type="submit"
-              className="bg-green-500 text-white px-2 py-1 rounded"
+              className="bg-green-500 text-white px-2 py-1 rounded ml-2"
             >
-              <Save className="w-4 h-4" />
+              <Save className="w-4 h-4 " />
             </button>
             <button
               type="button"
@@ -497,9 +523,9 @@ const ProfilePage = () => {
           <div className="mt-2 flex justify-end space-x-2">
             <button
               onClick={() => handleEditItem(workshop.id, "workshop")}
-              className="text-customGreen hover:text-customBrown transition duration-300"
+              className="text-customGreen hover:text-customBrown transition duration-300 ml-2"
             >
-              <Edit className="w-4 h-4" />
+              <Edit className="w-4 h-4 " />
             </button>
             <button
               onClick={() => handleRemoveItem(workshop.id, "workshop")}
@@ -542,9 +568,9 @@ const ProfilePage = () => {
           <div className="flex justify-end space-x-2">
             <button
               type="submit"
-              className="bg-green-500 text-white px-2 py-1 rounded"
+              className="bg-green-500 text-white px-2 py-1 rounded ml-2"
             >
-              <Save className="w-4 h-4" />
+              <Save className="w-4 h-4 ml-2" />
             </button>
             <button
               type="button"
@@ -584,7 +610,7 @@ const ProfilePage = () => {
           <div className="mt-2 flex justify-end space-x-2">
             <button
               onClick={() => handleEditItem(article.id, "article")}
-              className="text-customGreen hover:text-customBrown transition duration-300"
+              className="text-customGreen hover:text-customBrown transition duration-300 ml-2"
             >
               <Edit className="w-4 h-4" />
             </button>
@@ -601,7 +627,7 @@ const ProfilePage = () => {
   );
 
   return (
-    <div className="bg-amber-50 min-h-screen flex flex-col">
+    <div className="bg-amber-50 min-h-screen mt-16 flex flex-col">
       <main className="flex-grow container mx-auto mt-8 p-4">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="bg-customBrown h-40 relative">
@@ -684,7 +710,7 @@ const ProfilePage = () => {
                     onClick={() => setIsEditing(true)}
                     className="flex items-center text-customGreen hover:text-customBrown transition duration-300"
                   >
-                    <Edit className="w-4 h-4 mr-1" /> تعديل الملف الشخصي
+                    <Edit className="w-4 h-4 ml-1" /> تعديل الملف الشخصي
                   </button>
                 </div>
               </div>
@@ -694,13 +720,13 @@ const ProfilePage = () => {
 
         {/* Workshops Section */}
         <div className="mt-12">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex gap-4 items-center mb-6">
             <h3 className="text-2xl font-semibold">الورشات</h3>
             <Link
               to="/add-content"
               className="flex items-center text-customGreen hover:text-customBrown transition duration-300"
             >
-              <Book className="w-5 h-5 mr-1" /> إضافة ورشة
+              <Book className="w-5 h-5 ml-1" /> إضافة ورشة
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -710,17 +736,47 @@ const ProfilePage = () => {
 
         {/* Articles Section */}
         <div className="mt-12">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex gap-4 items-center mb-6">
             <h3 className="text-2xl font-semibold">المقالات</h3>
             <Link
               to="/add-content"
               className="flex items-center text-customGreen hover:text-customBrown transition duration-300"
             >
-              <Book className="w-5 h-5 mr-1" /> إضافة مقالة
+              <Book className="w-5 h-5 ml-1" /> إضافة مقالة
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {articles.map(article => renderArticleCard(article))}
+          </div>
+        </div>
+        <div>
+          <button
+            onClick={getOrderItems}
+            className="bg-customBrown text-white px-4 py-2 rounded hover:opacity-90 transition duration-300"
+          >
+            عرض الطلبات
+          </button>
+          <div className="mt-4 flex gap-10">
+            {orderItems.map(orderItem => (
+              <div
+                key={orderItem.id}
+                className="bg-white p-4 rounded-lg shadow-md mb-4"
+              >
+                <img
+                  src={
+                    orderItem.Product?.image
+                      ? `http://localhost:5000/uploads/${orderItem.Product?.image}`
+                      : "https://via.placeholder.com/128"
+                  }
+                  width={200}
+                  height={200}
+                />
+                <h4 className="font-semibold text-lg">
+                  {orderItem.Product.name}
+                </h4>
+                <p className="text-gray-600">الكمية: {orderItem.quantity}</p>
+              </div>
+            ))}
           </div>
         </div>
       </main>

@@ -66,7 +66,7 @@ const BillingAddressForm = ({ onSubmit }) => {
   };
 
   return (
-    <Card className="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
+    <Card className="max-w-md mx-auto mt-32 bg-white shadow-lg rounded-lg overflow-hidden">
       <CardHeader className="bg-blue-600 text-white p-6">
         <CardTitle className="text-2xl font-bold text-center">
           عنوان الفواتير

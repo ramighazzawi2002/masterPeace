@@ -41,7 +41,7 @@ function Articles() {
               title={article.title}
               description={article.breif}
               imgSrc={`http://localhost:5000/uploads/${article.image}`}
-              alt="صورة المقال"
+              alt={article.title}
               btnLink={`/articleinfo/${article.id}`}
             />
           ))}

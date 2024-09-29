@@ -4,7 +4,6 @@ const Redis = require("ioredis");
 const redis = new Redis(); // Assumes Redis is running on default port locally
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
 const generateOtp = () => {
   return Math.floor(100000 + Math.random() * 900000);
 };

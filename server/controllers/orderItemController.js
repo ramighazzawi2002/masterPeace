@@ -22,4 +22,17 @@ const addOrderItem = async (req, res) => {
     .json({ message: "Order items created", items: createdItems });
 };
 
-module.exports = { addOrderItem };
+const getOrderItems = async (req, res) => {
+  try {
+    const orderItems = await OrderItem.findAll({
+      where: { user_id: req.user },
+      include: Product,
+    });
+    res.json(orderItems);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "حدث خطأ ما" });
+  }
+};
+
+module.exports = { addOrderItem, getOrderItems };

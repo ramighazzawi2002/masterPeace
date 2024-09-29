@@ -184,7 +184,7 @@ const ProductDetails = () => {
           {/* Product Image */}
           <div className="md:w-1/2 md:pr-8">
             <img
-              src={cardImage}
+              src={`http://localhost:5000/uploads/${product.image}`}
               alt="فسيفساء أردنية"
               className="w-full rounded-lg shadow-lg"
             />
@@ -264,7 +264,11 @@ const ProductDetails = () => {
             <div className="p-4 rounded-lg my-7 bg-gray-100" key={comment.id}>
               <div className="flex items-center gap-4 mb-5">
                 <img
-                  src={profileImage}
+                  src={
+                    comment.User?.image
+                      ? `http://localhost:5000/uploads/${comment.User.image}`
+                      : profileImage
+                  }
                   alt="صورة الملف الشخصي"
                   className="h-12 w-12 rounded-full"
                 />

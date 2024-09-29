@@ -122,6 +122,16 @@ const ShoppingCartPage = () => {
   if (isLoading) return <div className="text-center mt-20">Loading...</div>;
   if (error)
     return <div className="text-center mt-20 text-red-500">{error}</div>;
+  if (cartItems.length === 0) {
+    return (
+      <div className="container mx-auto p-4 max-w-4xl my-20 text-center">
+        <h1 className="text-3xl font-bold mb-6 flex items-center justify-center text-gray-800">
+          <ShoppingCart className="mr-2" /> سلة التسوق
+        </h1>
+        <div className="text-xl mt-10">سلة التسوق فارغة</div>
+      </div>
+    );
+  }
 
   return (
     <>

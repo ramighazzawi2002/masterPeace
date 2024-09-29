@@ -44,8 +44,8 @@ function Products() {
               title={product.name}
               description={product.description}
               price={product.price}
-              imgSrc={cardImage}
-              alt="صورة المقال"
+              imgSrc={`http://localhost:5000/${product.image}`}
+              alt={product.name}
               btnLink={`/productinfo/${product.id}`}
               btnText="اشتري الآن"
               cardColor="#FFFFFF"

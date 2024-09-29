@@ -134,7 +134,7 @@ const CheckoutPage = () => {
   }
 
   return (
-    <Card className="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
+    <Card className="max-w-md mx-auto mt-32 bg-white shadow-lg rounded-lg overflow-hidden">
       <CardHeader className="bg-blue-600 text-white p-6">
         <CardTitle className="text-2xl font-bold text-center">الدفع</CardTitle>
       </CardHeader>
@@ -156,7 +156,7 @@ const CheckoutPage = () => {
         <div className="mb-6">
           <h3 className="text-lg font-semibold mb-2">الدفع عبر PayPal</h3>
           <PayPalButton
-            amount={workshopAmount}
+            amount={workshopAmount || amount}
             onSuccess={handlePayPalSuccess}
             options={{
               clientId:
@@ -170,7 +170,7 @@ const CheckoutPage = () => {
           <h3 className="text-lg font-semibold mb-2">الدفع عبر Stripe</h3>
           <Elements stripe={stripePromise}>
             <StripeCheckoutForm
-              amount={workshopAmount}
+              amount={workshopAmount || amount}
               onSuccess={handleStripeSuccess}
             />
           </Elements>

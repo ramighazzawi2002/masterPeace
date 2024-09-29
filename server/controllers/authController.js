@@ -1,9 +1,17 @@
 const axios = require("axios");
 const { loginOrSignupWithGoogle } = require("../controllers/userController");
+require("dotenv").config();
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
-
+console.log(
+  "CLIENT_ID:",
+  CLIENT_ID,
+  "CLIENT_SECRET:",
+  CLIENT_SECRET,
+  "REDIRECT_URI:",
+  REDIRECT_URI
+);
 const google = (req, res) => {
   const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=profile email`;
   res.redirect(url);

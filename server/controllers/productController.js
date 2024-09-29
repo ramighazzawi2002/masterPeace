@@ -38,7 +38,7 @@ const getProductWithComments = async (req, res) => {
       required: false,
       include: {
         model: User,
-        attributes: ["id", "username"],
+        attributes: ["id", "username", "image"],
       },
     },
   });

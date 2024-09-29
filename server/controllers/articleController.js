@@ -47,13 +47,14 @@ const getArticleWithComments = async (req, res) => {
         required: false,
         include: {
           model: User,
-          attributes: ["id", "username"],
+          attributes: ["id", "username", "image"],
         },
       },
     });
     const users = await User.findOne({ where: { id: articles.author_id } });
     articles.dataValues.author = users.username;
     articles.dataValues.user_id = user_id;
+    articles.dataValues.image = users.image;
     res.json(articles);
   } catch (error) {
     console.error("Error fetching articles:", error);

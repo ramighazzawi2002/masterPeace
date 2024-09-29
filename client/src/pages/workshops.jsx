@@ -43,7 +43,7 @@ function WorkShops() {
               title={workShop.title}
               description={workShop.description}
               imgSrc={`http://localhost:5000/uploads/${workShop.image}`}
-              alt="صورة المقال"
+              alt={workShop.title}
               btnLink={`/workshopinfo/${workShop.id}`}
             />
           ))}
