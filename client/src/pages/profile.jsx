@@ -11,6 +11,11 @@ import {
   Save,
   X,
   Trash2,
+  ChevronDown,
+  Phone,
+  CreditCard,
+  Package,
+  Hash,
 } from "lucide-react";
 import Footer from "../components/footer";
 import { Link } from "react-router-dom";
@@ -36,6 +41,7 @@ const ProfilePage = () => {
   const [editingItemId, setEditingItemId] = useState(null);
   const [editingItemType, setEditingItemType] = useState(null);
   const [orderItems, setOrderItems] = useState([]);
+  const [workshopRegistration, setWorkshopRegistration] = useState([]);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -195,29 +201,24 @@ const ProfilePage = () => {
     }
   };
 
-  {
-    /*
-          const getOrderItems = async (req, res) => {
-  try {
-    const orderItems = await OrderItem.findAll({
-      where: { user_id: req.user },
-      include: Product,
-    });
-    res.json(orderItems);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "حدث خطأ ما" });
-  }
-};
-         */
-  }
-
   const getOrderItems = async () => {
     try {
       const response = await axios.get("http://localhost:5000/orderItem/get");
       setOrderItems(response.data);
     } catch (error) {
       console.error("Error fetching order items:", error);
+    }
+  };
+
+  const getWorkShopPregeristration = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/workshopregistration/get"
+      );
+      console.log(response.data);
+      setWorkshopRegistration(response.data);
+    } catch (error) {
+      console.error("Error fetching workshop registration:", error);
     }
   };
 
@@ -749,32 +750,98 @@ const ProfilePage = () => {
             {articles.map(article => renderArticleCard(article))}
           </div>
         </div>
-        <div>
+        <div className="container mx-auto px-4 py-8">
           <button
             onClick={getOrderItems}
-            className="bg-customBrown text-white px-4 py-2 rounded hover:opacity-90 transition duration-300"
+            className="bg-customBrown text-white px-6 py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-opacity-90 transition duration-300 flex items-center justify-center mb-8"
           >
             عرض الطلبات
+            <ChevronDown className="mr-2" size={20} />
           </button>
-          <div className="mt-4 flex gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {orderItems.map(orderItem => (
               <div
                 key={orderItem.id}
-                className="bg-white p-4 rounded-lg shadow-md mb-4"
+                className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border border-gray-200"
               >
-                <img
-                  src={
-                    orderItem.Product?.image
-                      ? `http://localhost:5000/uploads/${orderItem.Product?.image}`
-                      : "https://via.placeholder.com/128"
-                  }
-                  width={200}
-                  height={200}
-                />
-                <h4 className="font-semibold text-lg">
+                <div className="mb-4 overflow-hidden rounded-lg">
+                  <img
+                    src={
+                      orderItem.Product?.image
+                        ? `http://localhost:5000/uploads/${orderItem.Product.image}`
+                        : "https://via.placeholder.com/200"
+                    }
+                    alt={orderItem.Product.name}
+                    className="w-full h-48 object-cover"
+                  />
+                </div>
+                <h4 className="font-bold text-xl mb-4 text-customBrown">
                   {orderItem.Product.name}
                 </h4>
-                <p className="text-gray-600">الكمية: {orderItem.quantity}</p>
+                <div className="space-y-3">
+                  <p className="text-gray-700 flex items-center">
+                    <Package className="ml-2 text-customBrown" size={18} />
+                    <span className="font-semibold ml-2">اسم المنتج:</span>{" "}
+                    {orderItem.Product.name}
+                  </p>
+                  <p className="text-gray-700 flex items-center">
+                    <Hash className="ml-2 text-customBrown" size={18} />
+                    <span className="font-semibold ml-2">الكمية:</span>{" "}
+                    {orderItem.quantity}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="container mx-auto px-4 py-8">
+          <button
+            onClick={getWorkShopPregeristration}
+            className="bg-customBrown text-white px-6 py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-opacity-90 transition duration-300 flex items-center justify-center mb-8"
+          >
+            عرض التسجيلات
+            <ChevronDown className="ml-2" size={20} />
+          </button>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {workshopRegistration.map(registration => (
+              <div
+                key={registration.id}
+                className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border border-gray-200"
+              >
+                <h4 className="font-bold text-xl mb-4 text-customBrown">
+                  {registration.workshop.title}
+                </h4>
+                <div className="space-y-3">
+                  <p className="text-gray-700 flex items-center">
+                    <User className="ml-2 text-customBrown" size={18} />
+                    <span className="font-semibold ml-2">الاسم:</span>{" "}
+                    {registration.full_name}
+                  </p>
+                  <p className="text-gray-700 flex items-center">
+                    <MapPin className="ml-2 text-customBrown" size={18} />
+                    <span className="font-semibold ml-2">المدينة:</span>{" "}
+                    {registration.city}
+                  </p>
+                  <p className="text-gray-700 flex items-center">
+                    <Phone className="ml-2 text-customBrown" size={18} />
+                    <span className="font-semibold ml-2">الهاتف:</span>{" "}
+                    {registration.phone_number}
+                  </p>
+                  <p className="text-gray-700 flex items-center">
+                    <DollarSign className="ml-2 text-customBrown" size={18} />
+                    <span className="font-semibold ml-2">
+                      المبلغ المدفوع:
+                    </span>{" "}
+                    {registration.amount_paid} دينار أردني
+                  </p>
+                  <p className="text-gray-700 flex items-center">
+                    <CreditCard className="ml-2 text-customBrown" size={18} />
+                    <span className="font-semibold ml-2">
+                      طريقة الدفع:
+                    </span>{" "}
+                    {registration.payment_method}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

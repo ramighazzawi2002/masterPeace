@@ -4,42 +4,42 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Link } from "react-router-dom";
 
-const ImprovedSwiper = ({ images }) => {
+function ImprovedSwiper({ items }) {
   return (
-    <div className="relative w-full h-screen bg-customBrown">
-      <Swiper
-        spaceBetween={0}
-        slidesPerView={1}
-        navigation={{
-          nextEl: ".swiper-button-prev",
-          prevEl: ".swiper-button-next",
-        }}
-        pagination={{ clickable: true }}
-        loop={true}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: false,
-        }}
-        modules={[Navigation, Pagination, Autoplay]}
-        className="w-full h-full"
-      >
-        {images.map((image, index) => (
-          <SwiperSlide key={index}>
-            <img
-              src={image}
-              alt={`Slide ${index + 1}`}
-              className="w-full h-full object-cover opacity-50"
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-      {/* <button className="swiper-button-prev absolute z-10 bg-white bg-opacity-50 p-2 rounded-full w-16 h-16"></button> */}
-      {/* <button className="swiper-button-next absolute top-1/2 right-4 z-10 bg-white bg-opacity-50 p-2 rounded-full"></button> */}
-      <button className="swiper-button-next absolute z-10 bg-white bg-opacity-50 p-2 rounded-full w-16 h-16"></button>
-      <button className="swiper-button-prev absolute z-10 bg-white bg-opacity-50 p-2 rounded-full w-16 h-16"></button>
-    </div>
+    <Swiper
+      modules={[Navigation, Pagination, Autoplay]}
+      spaceBetween={0}
+      slidesPerView={1}
+      navigation
+      pagination={{ clickable: true }}
+      autoplay={{ delay: 5000 }}
+      className="h-screen"
+    >
+      {items.map((item, index) => (
+        <SwiperSlide key={index} className="relative">
+          <img
+            src={item.image}
+            alt={item.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white">
+            <h2 className="text-4xl font-bold mb-4">{item.title}</h2>
+            <p className="text-xl mb-6 max-w-2xl text-center">
+              {item.description}
+            </p>
+            <Link
+              to={item.link}
+              className="bg-customGreen text-white px-6 py-3 rounded-full font-semibold hover:bg-customBrown transition-colors duration-300"
+            >
+              {item.cta}
+            </Link>
+          </div>
+        </SwiperSlide>
+      ))}
+    </Swiper>
   );
-};
+}
 
 export default ImprovedSwiper;

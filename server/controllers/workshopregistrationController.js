@@ -1,4 +1,4 @@
-const { WorkshopRegistration } = require("../models");
+const { WorkshopRegistration, Workshop } = require("../models");
 
 const createWorkshopRegistration = async (req, res) => {
   try {
@@ -34,7 +34,19 @@ const checkIfUserRegistered = async (req, res) => {
   }
 };
 
+const getWorkShopPregeristration = async (req, res) => {
+  const user_id = req.user;
+  const workshopRegistration = await WorkshopRegistration.findAll({
+    where: {
+      user_id,
+    },
+    include: [{ model: Workshop, as: "workshop" }],
+  });
+  res.status(200).json(workshopRegistration);
+};
+
 module.exports = {
   createWorkshopRegistration,
   checkIfUserRegistered,
+  getWorkShopPregeristration,
 };

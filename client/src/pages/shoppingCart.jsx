@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ShoppingCart, Trash2, Plus, Minus, CreditCard } from "lucide-react";
+import { ShoppingCart, Trash2, Plus, Minus, AlertCircle } from "lucide-react";
 import Footer from "../components/footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -124,11 +124,31 @@ const ShoppingCartPage = () => {
     return <div className="text-center mt-20 text-red-500">{error}</div>;
   if (cartItems.length === 0) {
     return (
-      <div className="container mx-auto p-4 max-w-4xl my-20 text-center">
-        <h1 className="text-3xl font-bold mb-6 flex items-center justify-center text-gray-800">
-          <ShoppingCart className="mr-2" /> سلة التسوق
-        </h1>
-        <div className="text-xl mt-10">سلة التسوق فارغة</div>
+      <div className="container mx-auto p-8 max-w-4xl my-20">
+        <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+          <h1 className="text-3xl font-bold mb-6 flex items-center justify-center text-customBrown">
+            <ShoppingCart className="mr-3" size={32} />
+            سلة التسوق
+          </h1>
+          <div className="border-t border-gray-200 pt-6">
+            <div className="flex flex-col items-center justify-center space-y-4">
+              <AlertCircle size={64} className="text-gray-400" />
+              <p className="text-xl font-semibold text-gray-600">
+                سلة التسوق فارغة
+              </p>
+              <p className="text-gray-500 max-w-md">
+                يبدو أنك لم تضف أي منتجات إلى سلة التسوق بعد. استكشف منتجاتنا
+                وأضف بعض العناصر الرائعة!
+              </p>
+              <button
+                className="mt-6 bg-customBrown text-white px-6 py-3 rounded-full font-semibold text-lg shadow-md hover:bg-opacity-90 transition duration-300"
+                onClick={() => navigate("/products")}
+              >
+                تصفح المنتجات
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

@@ -31,7 +31,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Product",
-      timestamps: true, // This is default, you can omit this line
     }
   );
   return Product;

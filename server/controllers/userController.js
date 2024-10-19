@@ -126,6 +126,7 @@ const login = async (req, res) => {
 };
 
 const loginOrSignupWithGoogle = async (profile, res) => {
+  console.log(profile);
   try {
     let user = await User.findOne({ where: { email: profile.email } });
 
@@ -135,6 +136,7 @@ const loginOrSignupWithGoogle = async (profile, res) => {
         username: profile.name,
         email: profile.email,
         auth_type: "google",
+        image: profile.picture,
       });
     }
 

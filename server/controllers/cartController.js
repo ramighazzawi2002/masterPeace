@@ -62,4 +62,14 @@ const clearCart = async (req, res) => {
   }
 };
 
-module.exports = { getCart, updateQuantity, addToCart, clearCart };
+const removeItem = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Cart.destroy({ where: { id } });
+    return res.status(200).json({ message: "Item removed" });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
+module.exports = { getCart, updateQuantity, addToCart, clearCart, removeItem };

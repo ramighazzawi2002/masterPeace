@@ -1,23 +1,31 @@
-const { where } = require("sequelize");
+const { where, Op } = require("sequelize");
 const { Article, Comment, User } = require("../models");
 const jwt = require("jsonwebtoken");
 const getArticles = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const search = req.query.search || "";
+  const offset = (page - 1) * limit;
+
   try {
-    const page = req.query.page || 1;
-    const limit = req.query.limit || 10;
-    const skip = (page - 1) * limit;
-    const articlesCount = await Article.count({ where: { is_approved: true } });
-    const articles = await Article.findAll({
-      where: { is_approved: true },
+    const { count, rows: articles } = await Article.findAndCountAll({
+      where: {
+        [Op.or]: [
+          { title: { [Op.iLike]: `%${search}%` } },
+          { content: { [Op.iLike]: `%${search}%` } },
+        ],
+      },
       limit,
-      offset: skip,
+      offset,
+      order: [["createdAt", "DESC"]],
     });
+
     res.json({
       data: articles,
-      totalArticles: articlesCount,
-      page: page,
-      limit: limit,
-      totalPages: Math.ceil(articlesCount / limit),
+      totalArticles: count,
+      page,
+      limit,
+      totalPages: Math.ceil(count / limit),
     });
   } catch (error) {
     console.error("Error fetching articles:", error);

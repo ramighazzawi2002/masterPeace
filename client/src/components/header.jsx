@@ -6,8 +6,11 @@ import Logo from "../img/logo.webp";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "@/components/context/userData";
+import profileImage from "../img/profile-circle-icon-512x512-zxne30hp.png";
+
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const [profile, setProfile] = useState(null);
   const { isLoggedIn, setIsLoggedIn, isGoogle } = useUserContext();
   const navigate = useNavigate();
   useEffect(() => {
@@ -17,6 +20,11 @@ const Header = () => {
           "http://localhost:5000/user/is-logged-in"
         );
         setIsLoggedIn(loginResponse.data.isLoggedIn);
+        const getProfileResponse = await axios.get(
+          `http://localhost:5000/user/profile`
+        );
+        setProfile(getProfileResponse.data);
+        console.log("getProfileResponse: ", getProfileResponse.data);
       } catch (err) {
         setIsLoggedIn(false);
       }
@@ -79,7 +87,20 @@ const Header = () => {
                 to="/profile"
                 className="text-white hover:text-customYellow"
               >
-                <User size={24} />
+                <img
+                  src={
+                    profile?.image
+                      ? `${
+                          profile.auth_type === "google"
+                            ? profile.image
+                            : `http://localhost:5000/uploads/${profile.image}`
+                        }`
+                      : profileImage
+                  }
+                  className={`h-9 w-9 rounded-full ${
+                    !profile && "invert"
+                  } true`}
+                />
               </Link>
               <Link
                 to="/shoppingCart"

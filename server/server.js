@@ -25,7 +25,6 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Article Router
 app.use("/article", article);
@@ -56,6 +55,13 @@ app.use("/orderitem", orderItemRouter);
 
 // Payment Router
 // app.use("/payment", payment);
+
+const adminRouter = require("./routes/adminRouter");
+
+// Admin Router
+app.use("/admin", adminRouter);
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

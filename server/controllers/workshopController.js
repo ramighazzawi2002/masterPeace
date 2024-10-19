@@ -1,29 +1,36 @@
 const { Workshop } = require("../models");
+const Op = require("sequelize").Op;
 
 const getWorkShops = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const search = req.query.search || "";
+  const offset = (page - 1) * limit;
+
   try {
-    const page = req.query.page || 1;
-    const limit = req.query.limit || 10;
-    const skip = (page - 1) * limit;
-    const workShopCount = await Workshop.count({
-      where: { is_approved: true },
-    });
-    const WorkShop = await Workshop.findAll({
-      where: { is_approved: true },
+    const { count, rows: workshops } = await Workshop.findAndCountAll({
+      where: {
+        is_approved: true,
+        [Op.or]: [
+          { title: { [Op.iLike]: `%${search}%` } },
+          { description: { [Op.iLike]: `%${search}%` } },
+        ],
+      },
       limit,
-      offset: skip,
+      offset,
+      order: [["start_time", "DESC"]],
     });
-    console.log(WorkShop);
+
     res.json({
-      data: WorkShop,
-      totalArticles: workShopCount,
-      page: page,
-      limit: limit,
-      totalPages: Math.ceil(workShopCount / limit),
+      data: workshops,
+      totalWorkshops: count,
+      page,
+      limit,
+      totalPages: Math.ceil(count / limit),
     });
   } catch (error) {
-    console.error("Error fetching Workshop:", error);
-    res.status(500).json({ message: "Error fetching Workshop" });
+    console.error("Error fetching workshops:", error);
+    res.status(500).json({ message: "Error fetching workshops" });
   }
 };
 

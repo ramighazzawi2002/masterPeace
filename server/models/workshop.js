@@ -43,11 +43,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       start_time: {
-        type: DataTypes.TIME,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       end_time: {
-        type: DataTypes.TIME,
+        type: DataTypes.DATE,
         allowNull: false,
       },
       cost: {
@@ -69,17 +69,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      image: {
-        type: DataTypes.STRING,
-      },
       owner_id: {
         type: DataTypes.INTEGER,
+      },
+      image: {
+        type: DataTypes.STRING,
       },
     },
     {
       sequelize,
       modelName: "Workshop",
-      timestamps: true,
     }
   );
   return Workshop;

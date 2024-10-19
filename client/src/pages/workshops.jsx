@@ -1,77 +1,126 @@
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  Clock,
+  MapPin,
+  Users,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 import Footer from "../components/footer";
 import SearchBar from "../components/searchBar";
-import Card from "../components/card";
-import cardImage from "../img/card-img.jpg";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function WorkShops() {
-  const [workShops, setWorkShops] = useState(null);
+  const [workShops, setWorkShops] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [hasMore, setHasMore] = useState(true);
+
+  const fetchWorkshops = useCallback(async (page = 1, search = "") => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/workshop/get?page=${page}&limit=6&search=${search}`
+      );
+      const newWorkshops = response.data.data;
+      setWorkShops(prevWorkshops =>
+        page === 1 ? newWorkshops : [...prevWorkshops, ...newWorkshops]
+      );
+      setCurrentPage(Number(response.data.page));
+      setTotalPages(response.data.totalPages);
+      setHasMore(page < response.data.totalPages);
+    } catch (err) {
+      console.log(err);
+    }
+    setIsLoading(false);
+  }, []);
 
   useEffect(() => {
-    setIsLoading(true);
+    fetchWorkshops(1, searchTerm);
+  }, [fetchWorkshops, searchTerm]);
 
-    (async () => {
-      const workShopResponse = await axios.get(
-        `http://localhost:5000/workshop/get?page=${currentPage}&limit=10`
-      );
-      console.log(workShopResponse.data);
-      setWorkShops(workShopResponse.data.data);
-      setCurrentPage(Number(workShopResponse.data.page));
-      setTotalPages(workShopResponse.data.totalPages);
-      setIsLoading(false);
-    })();
-  }, [currentPage]);
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const handleSearch = term => {
+    setSearchTerm(term);
+    setCurrentPage(1);
+    fetchWorkshops(1, term);
+  };
+
+  const loadMore = () => {
+    if (currentPage < totalPages) {
+      fetchWorkshops(currentPage + 1, searchTerm);
+    }
+  };
 
   return (
-    <>
-      <SearchBar />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-14 gap-x-0 justify-center max-w-[120rem] mb-28">
-        {workShops &&
-          workShops.map(workShop => (
-            <Card
-              btnColor="customGreen"
-              btnText="تعرف أكثر"
-              cardColor="#FFFFFF"
-              title={workShop.title}
-              description={workShop.description}
-              imgSrc={`http://localhost:5000/uploads/${workShop.image}`}
-              alt={workShop.title}
-              btnLink={`/workshopinfo/${workShop.id}`}
-            />
-          ))}
-      </div>
-      <div
-        className="mt-6 mb-10 flex justify-center items-center space-x-4"
-        style={{ direction: "ltr" }}
-      >
-        <button
-          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-          disabled={currentPage == 1}
-          className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l disabled:opacity-50"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        <span className="text-gray-700">
-          الصفحة {currentPage} من {totalPages}
-        </span>
-        <button
-          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-          disabled={currentPage == totalPages}
-          className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-r disabled:opacity-50"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
+    <div className="bg-sand-100 min-h-screen">
+      <SearchBar pageType="ورش العمل" onSearch={handleSearch} />
+      <div className="container mx-auto px-4 py-12">
+        <h1 className="text-5xl font-bold text-center mb-16 text-customBrown">
+          ورش العمل التراثية
+        </h1>
+        {isLoading && currentPage === 1 ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-jordanian-red-600"></div>
+          </div>
+        ) : workShops.length === 0 ? (
+          <div className="text-center text-2xl text-gray-600">
+            لم يتم العثور على ورش عمل مطابقة لبحثك.
+          </div>
+        ) : (
+          <InfiniteScroll
+            dataLength={workShops.length}
+            next={loadMore}
+            hasMore={hasMore}
+            loader={
+              <div className="flex justify-center items-center h-32">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-jordanian-red-600"></div>
+              </div>
+            }
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {workShops.map(workshop => (
+                <div
+                  key={workshop.id}
+                  className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                >
+                  <img
+                    src={`http://localhost:5000/uploads/${workshop.image}`}
+                    alt={workshop.title}
+                    className="w-full h-64 object-cover"
+                  />
+                  <div className="p-6">
+                    <h2 className="text-2xl font-semibold mb-2 text-customBrown">
+                      {workshop.title}
+                    </h2>
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      {workshop.description}
+                    </p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-2xl font-bold text-customGreen">
+                        {workshop.cost} دينار
+                      </span>
+                      <Link
+                        to={`/workshopinfo/${workshop.id}`}
+                        className="bg-customGreen text-white px-4 py-2 rounded-full flex items-center hover:bg-customBrown transition duration-300"
+                      >
+                        تفاصيل الورشة
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </InfiniteScroll>
+        )}
       </div>
       <Footer />
-    </>
+    </div>
   );
 }
+
 export default WorkShops;

@@ -1,21 +1,37 @@
 const { Product, User, Comment } = require("../models");
 const jwt = require("jsonwebtoken");
+const Op = require("sequelize").Op;
 
 const getAllProducts = async (req, res) => {
-  console.log("Get all products");
-  const page = req.query.page || 1;
-  const limit = req.query.limit || 10;
-  const skip = (page - 1) * limit;
-  const productsCount = await Product.count();
-  const products = await Product.findAll({ limit, offset: skip });
-  console.log(products);
-  res.json({
-    data: products,
-    totalArticles: productsCount,
-    page: page,
-    limit: limit,
-    totalPages: Math.ceil(productsCount / limit),
-  });
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const search = req.query.search || "";
+  const offset = (page - 1) * limit;
+
+  try {
+    const { count, rows: products } = await Product.findAndCountAll({
+      where: {
+        [Op.or]: [
+          { name: { [Op.iLike]: `%${search}%` } },
+          { description: { [Op.iLike]: `%${search}%` } },
+        ],
+      },
+      limit,
+      offset,
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.json({
+      data: products,
+      totalProducts: count,
+      page,
+      limit,
+      totalPages: Math.ceil(count / limit),
+    });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: "Error fetching products" });
+  }
 };
 
 const getProductWithComments = async (req, res) => {
