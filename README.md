@@ -99,7 +99,7 @@ MasterPiece is a comprehensive platform that offers a variety of features includ
 ## Contact Information
 
 - **Author**: Rami Ghazzawi
-- **Email**: ramighazzawi2002@gmail.com
+- **Email**: rami.ghazzawiabed@gmail.com
 
 
 ## Note
