@@ -12,11 +12,17 @@ module.exports = (sequelize, DataTypes) => {
       user_id: DataTypes.INTEGER,
       product_id: DataTypes.INTEGER,
       quantity: DataTypes.INTEGER,
+      full_name: DataTypes.STRING,
+      address: DataTypes.STRING,
+      city: DataTypes.STRING,
+      phone_number: DataTypes.STRING,
+      payment_method: DataTypes.ENUM("paypal", "stripe"),
+      amount_paid: DataTypes.DECIMAL(10, 2),
     },
     {
       sequelize,
       modelName: "OrderItem",
-      timestamps: true, // This is default, you can omit this line
+      timestamps: true,
     }
   );
   return OrderItem;

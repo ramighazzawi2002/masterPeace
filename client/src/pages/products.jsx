@@ -2,9 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
-import Footer from "../components/footer";
 import SearchBar from "../components/searchBar";
-import InfiniteScroll from "react-infinite-scroll-component";
+import Pagination from "../components/Pagination";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -12,7 +11,6 @@ function Products() {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [hasMore, setHasMore] = useState(true);
 
   const fetchProducts = useCallback(async (page = 1, search = "") => {
     setIsLoading(true);
@@ -20,13 +18,9 @@ function Products() {
       const response = await axios.get(
         `http://localhost:5000/product/all-products?page=${page}&limit=6&search=${search}`
       );
-      const newProducts = response.data.data;
-      setProducts(prevProducts =>
-        page === 1 ? newProducts : [...prevProducts, ...newProducts]
-      );
+      setProducts(response.data.data);
       setCurrentPage(Number(response.data.page));
       setTotalPages(response.data.totalPages);
-      setHasMore(page < response.data.totalPages);
     } catch (err) {
       console.log(err);
     }
@@ -43,20 +37,19 @@ function Products() {
     fetchProducts(1, term);
   };
 
-  const loadMore = () => {
-    if (currentPage < totalPages) {
-      fetchProducts(currentPage + 1, searchTerm);
-    }
+  const handlePageChange = newPage => {
+    setCurrentPage(newPage);
+    fetchProducts(newPage, searchTerm);
   };
 
   return (
-    <div className="bg-sand-100 min-h-screen">
+    <div className="bg-sand-100 min-h-screen overflow-hidden">
       <SearchBar pageType="المنتجات" onSearch={handleSearch} />
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-5xl font-bold text-center mb-16 text-customBrown">
           تراثنا الحرفي
         </h1>
-        {isLoading && currentPage === 1 ? (
+        {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-customBrown"></div>
           </div>
@@ -65,16 +58,7 @@ function Products() {
             لم يتم العثور على منتجات مطابقة لبحثك.
           </div>
         ) : (
-          <InfiniteScroll
-            dataLength={products.length}
-            next={loadMore}
-            hasMore={hasMore}
-            loader={
-              <div className="flex justify-center items-center h-32">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-customBrown"></div>
-              </div>
-            }
-          >
+          <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {products.map(product => (
                 <div
@@ -82,7 +66,7 @@ function Products() {
                   className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                 >
                   <img
-                    src={`http://localhost:5000/${product.image}`}
+                    src={`http://localhost:5000/uploads/${product.image}`}
                     alt={product.name}
                     className="w-full h-64 object-cover"
                   />
@@ -109,10 +93,14 @@ function Products() {
                 </div>
               ))}
             </div>
-          </InfiniteScroll>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
         )}
       </div>
-      <Footer />
     </div>
   );
 }

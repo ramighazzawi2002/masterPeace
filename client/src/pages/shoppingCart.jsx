@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { ShoppingCart, Trash2, Plus, Minus, AlertCircle } from "lucide-react";
-import Footer from "../components/footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useProductContext } from "../components/context/productData";
 const CartItem = ({ item, onRemove, onUpdateQuantity }) => (
   <div className="flex items-center justify-between p-4 border-b hover:bg-gray-50 transition duration-150">
     <div className="flex items-center flex-1 gap-10">
+      {console.log(item.product)}
       <img
-        src={`/api/placeholder/80/80`} // Placeholder image, replace with actual product image when available
+        src={`http://localhost:5000/uploads/${item.product.image}`} // Placeholder image, replace with actual product image when available
         alt={item.product.name}
         className="w-20 h-20 object-cover mr-4 rounded-md shadow-sm"
       />
@@ -192,7 +192,6 @@ const ShoppingCartPage = () => {
           </button>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

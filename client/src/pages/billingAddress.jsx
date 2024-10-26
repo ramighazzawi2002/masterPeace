@@ -11,14 +11,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-
+import { MapPin, User, Phone, Home } from "lucide-react";
 const jordanianCities = [
-  "Amman",
-  "Irbid",
-  "Zarqa",
-  "Aqaba",
-  "Madaba",
-  "Jerash",
+  "عمان",
+  "إربد",
+  "الزرقاء",
+  "العقبة",
+  "المداب",
+  "الجرش",
 ];
 
 const BillingAddressForm = ({ onSubmit }) => {
@@ -66,124 +66,175 @@ const BillingAddressForm = ({ onSubmit }) => {
   };
 
   return (
-    <Card className="max-w-md mx-auto mt-32 bg-white shadow-lg rounded-lg overflow-hidden">
-      <CardHeader className="bg-blue-600 text-white p-6">
-        <CardTitle className="text-2xl font-bold text-center">
-          عنوان الفواتير
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label
-              htmlFor="fullName"
-              className="text-right block mb-1 font-semibold"
-            >
-              الاسم الكامل
-            </Label>
-            <Input
-              id="fullName"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              className={`w-full p-2 border rounded-md text-right ${
-                errors.fullName ? "border-red-500" : "border-gray-300"
-              }`}
-              dir="rtl"
-            />
-            {errors.fullName && (
-              <Alert variant="destructive" className="mt-2">
-                <AlertDescription>{errors.fullName}</AlertDescription>
-              </Alert>
-            )}
-          </div>
-          <div>
-            <Label
-              htmlFor="address"
-              className="text-right block mb-1 font-semibold"
-            >
-              العنوان
-            </Label>
-            <Input
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              className={`w-full p-2 border rounded-md text-right ${
-                errors.address ? "border-red-500" : "border-gray-300"
-              }`}
-              dir="rtl"
-            />
-            {errors.address && (
-              <Alert variant="destructive" className="mt-2">
-                <AlertDescription>{errors.address}</AlertDescription>
-              </Alert>
-            )}
-          </div>
-          <div>
-            <Label
-              htmlFor="city"
-              className="text-right block mb-1 font-semibold"
-            >
-              المدينة
-            </Label>
-            <Select
-              name="city"
-              onValueChange={value =>
-                handleChange({ target: { name: "city", value } })
-              }
-            >
-              <SelectTrigger
-                className={`w-full ${errors.city ? "border-red-500" : ""}`}
+    <>
+      <Card className="max-w-xl mx-auto mt-36 bg-sand-100 shadow-lg rounded-lg overflow-hidden border-2 border-customBrown mb-16">
+        <CardHeader className="bg-customBrown text-white p-6">
+          <CardTitle className="text-3xl font-bold text-center flex items-center justify-center">
+            <MapPin className="mr-2" size={28} />
+            عنوان الفواتير
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="relative">
+              <Label
+                htmlFor="fullName"
+                className="text-right block mb-2 font-semibold text-customBrown"
               >
-                <SelectValue placeholder="اختر المدينة" />
-              </SelectTrigger>
-              <SelectContent>
-                {jordanianCities.map(city => (
-                  <SelectItem key={city} value={city}>
-                    {city}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.city && (
-              <Alert variant="destructive" className="mt-2">
-                <AlertDescription>{errors.city}</AlertDescription>
-              </Alert>
-            )}
-          </div>
-          <div>
-            <Label
-              htmlFor="phoneNumber"
-              className="text-right block mb-1 font-semibold"
+                الاسم الكامل
+              </Label>
+              <div className="relative">
+                <Input
+                  id="fullName"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  className={`w-full p-3 border-2 rounded-md text-right pr-10 ${
+                    errors.fullName
+                      ? "border-red-500"
+                      : "border-customBrown/50 focus:border-customGreen"
+                  }`}
+                  dir="rtl"
+                />
+                <User
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-customBrown/50"
+                  size={20}
+                />
+              </div>
+              {errors.fullName && (
+                <Alert
+                  variant="destructive"
+                  className="mt-2 bg-red-100 text-red-800 border border-red-300"
+                >
+                  <AlertDescription>{errors.fullName}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+
+            <div className="relative">
+              <Label
+                htmlFor="address"
+                className="text-right block mb-2 font-semibold text-customBrown"
+              >
+                العنوان
+              </Label>
+              <div className="relative">
+                <Input
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  className={`w-full p-3 border-2 rounded-md text-right pr-10 ${
+                    errors.address
+                      ? "border-red-500"
+                      : "border-customBrown/50 focus:border-customGreen"
+                  }`}
+                  dir="rtl"
+                />
+                <Home
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-customBrown/50"
+                  size={20}
+                />
+              </div>
+              {errors.address && (
+                <Alert
+                  variant="destructive"
+                  className="mt-2 bg-red-100 text-red-800 border border-red-300"
+                >
+                  <AlertDescription>{errors.address}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+
+            <div className="relative">
+              <Label
+                htmlFor="city"
+                className="text-right block mb-2 font-semibold text-customBrown"
+              >
+                المدينة
+              </Label>
+              <Select
+                name="city"
+                onValueChange={value =>
+                  handleChange({ target: { name: "city", value } })
+                }
+                dir="rtl"
+              >
+                <SelectTrigger
+                  className={`w-full p-3 text-right border-2 ${
+                    errors.city
+                      ? "border-red-500"
+                      : "border-customBrown/50 focus:border-customGreen"
+                  }`}
+                >
+                  <SelectValue
+                    placeholder="اختر المدينة"
+                    className="text-right"
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {jordanianCities.map(city => (
+                    <SelectItem className="text-right" key={city} value={city}>
+                      {city}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.city && (
+                <Alert
+                  variant="destructive"
+                  className="mt-2 bg-red-100 text-red-800 border border-red-300"
+                >
+                  <AlertDescription>{errors.city}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+
+            <div className="relative">
+              <Label
+                htmlFor="phoneNumber"
+                className="text-right block mb-2 font-semibold text-customBrown"
+              >
+                رقم الهاتف
+              </Label>
+              <div className="relative">
+                <Input
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  className={`w-full p-3 border-2 rounded-md text-right pr-10 ${
+                    errors.phoneNumber
+                      ? "border-red-500"
+                      : "border-customBrown/50 focus:border-customGreen"
+                  }`}
+                  dir="rtl"
+                />
+                <Phone
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-customBrown/50"
+                  size={20}
+                />
+              </div>
+              {errors.phoneNumber && (
+                <Alert
+                  variant="destructive"
+                  className="mt-2 bg-red-100 text-red-800 border border-red-300"
+                >
+                  <AlertDescription>{errors.phoneNumber}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full bg-customGreen text-white py-3 px-4 rounded-md hover:bg-customGreen/90 transition duration-300 text-lg font-semibold shadow-md"
             >
-              رقم الهاتف
-            </Label>
-            <Input
-              id="phoneNumber"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              className={`w-full p-2 border rounded-md text-right ${
-                errors.phoneNumber ? "border-red-500" : "border-gray-300"
-              }`}
-              dir="rtl"
-            />
-            {errors.phoneNumber && (
-              <Alert variant="destructive" className="mt-2">
-                <AlertDescription>{errors.phoneNumber}</AlertDescription>
-              </Alert>
-            )}
-          </div>
-          <Button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
-          >
-            الانتقال إلى الدفع
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+              الانتقال إلى الدفع
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </>
   );
 };
 

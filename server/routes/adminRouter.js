@@ -48,4 +48,48 @@ router.put(
   adminController.editAdminArticle
 );
 
+// Add these new routes
+router.get(
+  "/unapproved-articles",
+  auth,
+  adminAuth,
+  adminController.getUnapprovedArticles
+);
+router.put(
+  "/approve-article/:id",
+  auth,
+  adminAuth,
+  adminController.approveArticle
+);
+
+// Add these new routes at the end of the file, before module.exports
+
+router.get(
+  "/unapproved-workshops",
+  auth,
+  adminAuth,
+  adminController.getUnapprovedWorkshops
+);
+router.put(
+  "/approve-workshop/:id",
+  auth,
+  adminAuth,
+  adminController.approveWorkshop
+);
+
+// Add this new route
+router.get(
+  "/contact-messages",
+  auth,
+  adminAuth,
+  adminController.getContactMessages
+);
+
+router.post(
+  "/reply-contact-message",
+  auth,
+  adminAuth,
+  adminController.replyContactMessage
+);
+
 module.exports = router;

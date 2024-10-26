@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import Footer from "../components/footer";
 import LabelHeading from "../components/login&&signup/labelHeading";
 import Button from "../components/login&&signup/button";
 import axios from "axios";
@@ -153,7 +152,6 @@ function OTP() {
           )}
         </div>
       </form>
-      <Footer />
     </>
   );
 }

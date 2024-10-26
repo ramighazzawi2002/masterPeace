@@ -43,7 +43,7 @@ const getArticleWithComments = async (req, res) => {
     }
     const articles = await Article.findOne({
       where: { id: req.params.id },
-      attributes: ["id", "title", "content", "author_id"],
+      attributes: ["id", "title", "content", "author_id", "image"],
       include: {
         model: Comment,
         where: {
@@ -55,14 +55,15 @@ const getArticleWithComments = async (req, res) => {
         required: false,
         include: {
           model: User,
-          attributes: ["id", "username", "image"],
+          attributes: ["id", "username", "image", "auth_type"],
         },
       },
     });
     const users = await User.findOne({ where: { id: articles.author_id } });
     articles.dataValues.author = users.username;
     articles.dataValues.user_id = user_id;
-    articles.dataValues.image = users.image;
+    articles.dataValues.userImage = users.image;
+    articles.dataValues.auth_type = users.auth_type;
     res.json(articles);
   } catch (error) {
     console.error("Error fetching articles:", error);

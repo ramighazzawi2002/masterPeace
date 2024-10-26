@@ -1,4 +1,3 @@
-import Footer from "../components/footer";
 import { Input } from "@material-tailwind/react";
 import { Textarea } from "@material-tailwind/react";
 import { useState } from "react";
@@ -105,7 +104,6 @@ function ContactUs() {
           </form>
         </div>
       </div>
-      <Footer />
     </>
   );
 }

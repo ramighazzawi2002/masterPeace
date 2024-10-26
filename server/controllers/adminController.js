@@ -5,10 +5,12 @@ const {
   User,
   Comment,
   sequelize,
+  Messages,
 } = require("../models");
 const { Op } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
+const nodemailer = require("nodemailer");
 
 const getAdminDashboardData = async (req, res) => {
   try {
@@ -78,7 +80,7 @@ const getAdminArticles = async (req, res) => {
 const getAdminWorkshops = async (req, res) => {
   try {
     const workshops = await Workshop.findAll({
-      attributes: ["id", "title", "start_time", "max_participants"],
+      attributes: ["id", "title", "start_time", "max_participants", "image"],
       include: [{ model: User, as: "owner", attributes: ["username"] }],
       order: [["start_time", "DESC"]],
     });
@@ -92,7 +94,7 @@ const getAdminWorkshops = async (req, res) => {
 const getAdminProducts = async (req, res) => {
   try {
     const products = await Product.findAll({
-      attributes: ["id", "name", "price", "stock"],
+      attributes: ["id", "name", "price", "stock", "image"],
       include: [{ model: User, as: "author", attributes: ["username"] }],
       order: [["createdAt", "DESC"]],
     });
@@ -239,6 +241,141 @@ const getAdminUsers = async (req, res) => {
   }
 };
 
+// Add this new function to get unapproved articles
+const getUnapprovedArticles = async (req, res) => {
+  try {
+    const articles = await Article.findAll({
+      where: { is_approved: false },
+      attributes: ["id", "title", "author_id", "createdAt", "image"],
+      include: [{ model: User, as: "author", attributes: ["username"] }],
+      order: [["createdAt", "DESC"]],
+    });
+    res.json(articles);
+  } catch (error) {
+    console.error("Error fetching unapproved articles:", error);
+    res.status(500).json({ message: "Error fetching unapproved articles" });
+  }
+};
+
+// Add this new function to approve or disapprove an article
+const approveArticle = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { is_approved } = req.body;
+    const article = await Article.findByPk(id);
+
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+
+    article.is_approved = is_approved;
+    await article.save();
+
+    res.json({ message: "Article approval status updated successfully" });
+  } catch (error) {
+    console.error("Error updating article approval status:", error);
+    res.status(500).json({ message: "Error updating article approval status" });
+  }
+};
+
+// Add these new functions at the end of the file
+
+const getUnapprovedWorkshops = async (req, res) => {
+  try {
+    const workshops = await Workshop.findAll({
+      where: { is_approved: false },
+      attributes: [
+        "id",
+        "title",
+        "owner_id",
+        "createdAt",
+        "start_time",
+        "max_participants",
+      ],
+      include: [{ model: User, as: "owner", attributes: ["username"] }],
+      order: [["createdAt", "DESC"]],
+    });
+    res.json(workshops);
+  } catch (error) {
+    console.error("Error fetching unapproved workshops:", error);
+    res.status(500).json({ message: "Error fetching unapproved workshops" });
+  }
+};
+
+const approveWorkshop = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { is_approved } = req.body;
+    const workshop = await Workshop.findByPk(id);
+
+    if (!workshop) {
+      return res.status(404).json({ message: "Workshop not found" });
+    }
+
+    workshop.is_approved = is_approved;
+    await workshop.save();
+
+    res.json({ message: "Workshop approval status updated successfully" });
+  } catch (error) {
+    console.error("Error updating workshop approval status:", error);
+    res
+      .status(500)
+      .json({ message: "Error updating workshop approval status" });
+  }
+};
+
+// Add this new function at the end of the file
+
+const getContactMessages = async (req, res) => {
+  try {
+    const messages = await Messages.findAll({
+      order: [["createdAt", "DESC"]],
+    });
+    res.json(messages);
+  } catch (error) {
+    console.error("Error fetching contact messages:", error);
+    res.status(500).json({ message: "Error fetching contact messages" });
+  }
+};
+
+const replyContactMessage = async (req, res) => {
+  try {
+    const { messageId, replyContent } = req.body;
+
+    // Fetch the original message
+    const message = await Messages.findByPk(messageId);
+    if (!message) {
+      return res.status(404).json({ message: "Message not found" });
+    }
+
+    // Create a transporter
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASS,
+      },
+    });
+
+    // Send the email
+    await transporter.sendMail({
+      from: process.env.EMAIL,
+      to: message.email,
+      subject: "رد على رسالتك",
+      text: replyContent,
+    });
+
+    // Update the message to mark it as replied (optional)
+    await message.update({ replied: true });
+
+    res.json({ message: "Reply sent successfully" });
+  } catch (error) {
+    console.error("Error sending reply:", error);
+    res.status(500).json({ message: "Error sending reply" });
+  }
+};
+
+// Add this to the module.exports
 module.exports = {
   getAdminDashboardData,
   getAdminArticles,
@@ -250,4 +387,10 @@ module.exports = {
   deleteAdminItem,
   editAdminArticle,
   getAdminUsers,
+  getUnapprovedArticles,
+  approveArticle,
+  getUnapprovedWorkshops,
+  approveWorkshop,
+  getContactMessages,
+  replyContactMessage,
 };

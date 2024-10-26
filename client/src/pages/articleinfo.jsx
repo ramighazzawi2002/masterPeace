@@ -4,7 +4,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { Rating, Textarea, Button } from "@material-tailwind/react";
 import { Pencil, Trash2 } from "lucide-react";
-import Footer from "../components/footer";
 import profileImage from "../img/profile-circle-icon-512x512-zxne30hp.png";
 import cardImage from "../img/card-img.jpg";
 
@@ -165,12 +164,16 @@ function ArticleInfo() {
           <h1 className="text-4xl font-bold text-customBrown mb-7">
             {article.title}
           </h1>
-
+          {console.log(article)}
           <div className="flex gap-5 items-center mb-8">
             <img
               src={
-                article.image
-                  ? `http://localhost:5000/uploads/${article.image}`
+                article.userImage
+                  ? `${
+                      article.auth_type === "local"
+                        ? `http://localhost:5000/uploads/${article.userImage}`
+                        : article.userImage
+                    } `
                   : profileImage
               }
               alt="صورة الملف الشخصي"
@@ -182,7 +185,7 @@ function ArticleInfo() {
           </div>
 
           <img
-            src={cardImage}
+            src={`http://localhost:5000/uploads/${article.image}`}
             alt="صورة المقال"
             className="h-[28rem] w-full object-cover rounded-lg mb-7"
           />
@@ -197,7 +200,9 @@ function ArticleInfo() {
                   <img
                     src={
                       comment.User?.image
-                        ? `http://localhost:5000/uploads/${comment.User?.image}`
+                        ? comment.User?.auth_type === "local"
+                          ? `http://localhost:5000/uploads/${comment.User?.image}`
+                          : comment.User?.image
                         : profileImage
                     }
                     alt="صورة الملف الشخصي"
@@ -300,7 +305,6 @@ function ArticleInfo() {
           </section>
         </article>
       </div>
-      <Footer />
     </>
   );
 }

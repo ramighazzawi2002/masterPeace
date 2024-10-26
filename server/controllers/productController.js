@@ -54,7 +54,7 @@ const getProductWithComments = async (req, res) => {
       required: false,
       include: {
         model: User,
-        attributes: ["id", "username", "image"],
+        attributes: ["id", "username", "image", "auth_type"],
       },
     },
   });

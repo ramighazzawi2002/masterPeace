@@ -9,7 +9,7 @@ const getCart = async (req, res) => {
         {
           model: Product,
           as: "product",
-          attributes: ["id", "name", "price"],
+          attributes: ["id", "name", "price", "image"],
         },
       ],
     });

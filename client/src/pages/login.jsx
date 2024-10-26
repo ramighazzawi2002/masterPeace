@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
-import Footer from "../components/footer";
 import Input from "../components/login&&signup/input";
 import LabelHeading from "../components/login&&signup/labelHeading";
 import Button from "../components/login&&signup/button";
@@ -128,7 +127,6 @@ function Login() {
         <HyperLink link="نسيت كلمة المرور؟" path="/forget-password" />
         <HyperLink text="ليس لديك حساب؟" link="سجل الان" path="/signup" />
       </form>
-      <Footer />
     </>
   );
 }

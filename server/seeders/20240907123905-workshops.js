@@ -24,6 +24,7 @@ module.exports = {
           owner_id: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
+          image: "صناعة_الفخار_التقليدي.jpg",
         },
         {
           title: "ورشة النسيج التراثي",
@@ -43,6 +44,7 @@ module.exports = {
           owner_id: 2,
           createdAt: new Date(),
           updatedAt: new Date(),
+          image: "النسيج-التراثي.jpeg",
         },
         {
           title: "ورشة الطهي التقليدي الأردني",
@@ -62,6 +64,7 @@ module.exports = {
           owner_id: 3,
           createdAt: new Date(),
           updatedAt: new Date(),
+          image: "المأكولات_الشعبية_الاردنية.jpg",
         },
       ],
       {}

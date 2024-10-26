@@ -15,6 +15,7 @@ module.exports = {
           is_approved: true,
           createdAt: new Date(),
           updatedAt: new Date(),
+          image: "سجادة-اردنية-تقليدية.jfif",
         },
         {
           author_id: 2,
@@ -26,6 +27,7 @@ module.exports = {
           is_approved: true,
           createdAt: new Date(),
           updatedAt: new Date(),
+          image: "ابريق-قهوة.jfif",
         },
         {
           author_id: 3,
@@ -36,6 +38,7 @@ module.exports = {
           is_approved: true,
           createdAt: new Date(),
           updatedAt: new Date(),
+          image: "ثوب-اردني-مطرز.jpg",
         },
         {
           author_id: 1,
@@ -47,6 +50,7 @@ module.exports = {
           is_approved: true,
           createdAt: new Date(),
           updatedAt: new Date(),
+          image: "خنجر-اردني-تقليدي.jpg",
         },
         {
           author_id: 2,
@@ -57,6 +61,7 @@ module.exports = {
           is_approved: true,
           createdAt: new Date(),
           updatedAt: new Date(),
+          image: "فخار-جرش.jpg",
         },
       ],
       {}

@@ -9,9 +9,8 @@ import {
   Users,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import Footer from "../components/footer";
 import SearchBar from "../components/searchBar";
-import InfiniteScroll from "react-infinite-scroll-component";
+import Pagination from "../components/Pagination";
 
 function WorkShops() {
   const [workShops, setWorkShops] = useState([]);
@@ -19,7 +18,6 @@ function WorkShops() {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [hasMore, setHasMore] = useState(true);
 
   const fetchWorkshops = useCallback(async (page = 1, search = "") => {
     setIsLoading(true);
@@ -27,13 +25,9 @@ function WorkShops() {
       const response = await axios.get(
         `http://localhost:5000/workshop/get?page=${page}&limit=6&search=${search}`
       );
-      const newWorkshops = response.data.data;
-      setWorkShops(prevWorkshops =>
-        page === 1 ? newWorkshops : [...prevWorkshops, ...newWorkshops]
-      );
+      setWorkShops(response.data.data);
       setCurrentPage(Number(response.data.page));
       setTotalPages(response.data.totalPages);
-      setHasMore(page < response.data.totalPages);
     } catch (err) {
       console.log(err);
     }
@@ -50,20 +44,19 @@ function WorkShops() {
     fetchWorkshops(1, term);
   };
 
-  const loadMore = () => {
-    if (currentPage < totalPages) {
-      fetchWorkshops(currentPage + 1, searchTerm);
-    }
+  const handlePageChange = newPage => {
+    setCurrentPage(newPage);
+    fetchWorkshops(newPage, searchTerm);
   };
 
   return (
-    <div className="bg-sand-100 min-h-screen">
+    <div className="bg-sand-100 min-h-screen overflow-hidden">
       <SearchBar pageType="ورش العمل" onSearch={handleSearch} />
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-5xl font-bold text-center mb-16 text-customBrown">
           ورش العمل التراثية
         </h1>
-        {isLoading && currentPage === 1 ? (
+        {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-jordanian-red-600"></div>
           </div>
@@ -72,16 +65,7 @@ function WorkShops() {
             لم يتم العثور على ورش عمل مطابقة لبحثك.
           </div>
         ) : (
-          <InfiniteScroll
-            dataLength={workShops.length}
-            next={loadMore}
-            hasMore={hasMore}
-            loader={
-              <div className="flex justify-center items-center h-32">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-jordanian-red-600"></div>
-              </div>
-            }
-          >
+          <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {workShops.map(workshop => (
                 <div
@@ -115,10 +99,14 @@ function WorkShops() {
                 </div>
               ))}
             </div>
-          </InfiniteScroll>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
         )}
       </div>
-      <Footer />
     </div>
   );
 }

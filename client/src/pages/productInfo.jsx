@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ShoppingCart } from "lucide-react";
 import cardImage from "../img/card-img.jpg";
-import Footer from "../components/footer";
 import { Rating, Textarea, Button } from "@material-tailwind/react";
 import profileImage from "../img/profile-circle-icon-512x512-zxne30hp.png";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Pencil, Trash2 } from "lucide-react";
+import { useCart } from "@/components/context/CartContext";
 
 const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
@@ -20,6 +20,7 @@ const ProductDetails = () => {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedContent, setEditedContent] = useState("");
   const [editedRating, setEditedRating] = useState(0);
+  const { updateCartCount } = useCart();
 
   const handleAddQuantity = () => {
     if (quantity < product.stock) setQuantity(quantity + 1);
@@ -160,6 +161,7 @@ const ProductDetails = () => {
         },
         { withCredentials: true }
       );
+      updateCartCount(); // Update the cart count after adding a product
       Swal.fire({
         icon: "success",
         title: "تم",
@@ -266,7 +268,9 @@ const ProductDetails = () => {
                 <img
                   src={
                     comment.User?.image
-                      ? `http://localhost:5000/uploads/${comment.User.image}`
+                      ? comment.User?.auth_type === "local"
+                        ? `http://localhost:5000/uploads/${comment.User?.image}`
+                        : comment.User?.image
                       : profileImage
                   }
                   alt="صورة الملف الشخصي"
@@ -366,7 +370,6 @@ const ProductDetails = () => {
           </Button>
         </section>
       </div>
-      <Footer />
     </>
   );
 };

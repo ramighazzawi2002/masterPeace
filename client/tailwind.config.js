@@ -5,6 +5,9 @@ module.exports = withMT({
   content: ["./src/**/*.{js,jsx,ts,tsx,html}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Noto Kufi Arabic", "sans-serif"],
+      },
       colors: {
         customRed: "#be2a2a",
         customGreen: "#8BC34A",

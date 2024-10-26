@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { debounce } from "lodash";
-import Footer from "@/components/footer";
+import { motion } from "framer-motion";
 
 const AddContentPage = () => {
   const navigate = useNavigate();
@@ -221,22 +221,41 @@ const AddContentPage = () => {
           });
         } else if (key === "image" && formData[key]) {
           formDataToSend.append("image", formData[key]);
-        } else {
+        } else if (
+          (key === "start_time" || key === "end_time") &&
+          contentType === "workshop"
+        ) {
+          // Only format time for workshops
+          const [hours, minutes] = formData[key].split(":");
+          const formattedTime = `${hours.padStart(2, "0")}:${minutes.padStart(
+            2,
+            "0"
+          )}`;
+          formDataToSend.append(key, formattedTime);
+        } else if (formData[key] !== "") {
+          // Only append non-empty values
           formDataToSend.append(key, formData[key]);
         }
       });
-      console.log("formDataToSend", formDataToSend);
-      await axios.post(endpoint, formDataToSend, {
+
+      console.log("formDataToSend", Object.fromEntries(formDataToSend));
+      const response = await axios.post(endpoint, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+      console.log("Server response:", response.data);
       setSuccess("تمت إضافة المحتوى بنجاح");
       setTimeout(() => {
         navigate("/profile");
       }, 2000);
     } catch (error) {
       console.error("Error adding content:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        console.error("Response headers:", error.response.headers);
+      }
       setError(
         error.response?.data?.message ||
           "حدث خطأ أثناء إضافة المحتوى. يرجى المحاولة مرة أخرى."
@@ -291,43 +310,73 @@ const AddContentPage = () => {
 
   return (
     <>
-      <div className="bg-amber-50 min-h-screen pt-10 mt-20">
+      <div className="bg-gradient-to-b from-amber-50 to-amber-100 min-h-screen pt-20 pb-10">
         <main className="container mx-auto mt-8 p-4">
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden p-6">
-            <h2 className="text-2xl font-bold mb-4">إضافة محتوى جديد</h2>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-white rounded-lg shadow-lg overflow-hidden p-8 max-w-3xl mx-auto"
+          >
+            <h2 className="text-3xl font-bold mb-6 text-center text-customBrown">
+              إضافة محتوى جديد
+            </h2>
             {error && (
-              <Alert variant="destructive" className="mb-4">
+              <Alert variant="destructive" className="mb-6">
                 <AlertTitle>خطأ</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
             {success && (
-              <Alert variant="success" className="mb-4">
+              <Alert variant="success" className="mb-6">
                 <AlertTitle>نجاح</AlertTitle>
                 <AlertDescription>{success}</AlertDescription>
               </Alert>
             )}
-            <div className="mb-4">
-              <label className="block mb-2">نوع المحتوى:</label>
-              <select
-                value={contentType}
-                onChange={e => setContentType(e.target.value)}
-                className="w-full p-2 border rounded"
-              >
-                <option value="article">مقالة</option>
-                <option value="workshop">ورشة</option>
-              </select>
+            <div className="mb-6">
+              <label className="block mb-2 font-semibold text-customBrown">
+                نوع المحتوى:
+              </label>
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={() => setContentType("article")}
+                  className={`px-6 py-2 rounded-full transition-all ${
+                    contentType === "article"
+                      ? "bg-customBrown text-white"
+                      : "bg-amber-100 text-customBrown hover:bg-amber-200"
+                  }`}
+                >
+                  مقالة
+                </button>
+                <button
+                  onClick={() => setContentType("workshop")}
+                  className={`px-6 py-2 rounded-full transition-all ${
+                    contentType === "workshop"
+                      ? "bg-customBrown text-white"
+                      : "bg-amber-100 text-customBrown hover:bg-amber-200"
+                  }`}
+                >
+                  ورشة
+                </button>
+              </div>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="form-group">
+                <label
+                  htmlFor="title"
+                  className="block mb-2 font-semibold text-customBrown"
+                >
+                  العنوان
+                </label>
                 <input
                   type="text"
+                  id="title"
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  placeholder="العنوان"
-                  className={`w-full p-2 border rounded ${
-                    fieldErrors.title ? "border-red-500" : ""
+                  placeholder="أدخل العنوان هنا"
+                  className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
+                    fieldErrors.title ? "border-red-500" : "border-amber-200"
                   }`}
                   required
                 />
@@ -337,16 +386,26 @@ const AddContentPage = () => {
                   </p>
                 )}
               </div>
+
               {contentType === "article" ? (
                 <>
-                  <div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="content"
+                      className="block mb-2 font-semibold text-customBrown"
+                    >
+                      المحتوى
+                    </label>
                     <textarea
+                      id="content"
                       name="content"
                       value={formData.content}
                       onChange={handleChange}
-                      placeholder="المحتوى"
-                      className={`w-full p-2 border rounded ${
-                        fieldErrors.content ? "border-red-500" : ""
+                      placeholder="أدخل محتوى المقالة هنا"
+                      className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
+                        fieldErrors.content
+                          ? "border-red-500"
+                          : "border-amber-200"
                       }`}
                       rows="10"
                       required
@@ -357,15 +416,24 @@ const AddContentPage = () => {
                       </p>
                     )}
                   </div>
-                  <div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="breif"
+                      className="block mb-2 font-semibold text-customBrown"
+                    >
+                      نبذة مختصرة
+                    </label>
                     <input
                       type="text"
+                      id="breif"
                       name="breif"
                       value={formData.breif}
                       onChange={handleChange}
-                      placeholder="نبذة مختصرة"
-                      className={`w-full p-2 border rounded ${
-                        fieldErrors.breif ? "border-red-500" : ""
+                      placeholder="أدخل نبذة مختصرة عن المقالة"
+                      className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
+                        fieldErrors.breif
+                          ? "border-red-500"
+                          : "border-amber-200"
                       }`}
                       required
                     />
@@ -375,33 +443,26 @@ const AddContentPage = () => {
                       </p>
                     )}
                   </div>
-                  <div>
-                    <input
-                      type="file"
-                      name="image"
-                      onChange={handleChange}
-                      className={`w-full p-2 border rounded ${
-                        fieldErrors.image ? "border-red-500" : ""
-                      }`}
-                      required
-                    />
-                    {fieldErrors.image && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {fieldErrors.image}
-                      </p>
-                    )}
-                  </div>
                 </>
               ) : (
                 <>
-                  <div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="description"
+                      className="block mb-2 font-semibold text-customBrown"
+                    >
+                      الوصف
+                    </label>
                     <textarea
+                      id="description"
                       name="description"
                       value={formData.description}
                       onChange={handleChange}
-                      placeholder="الوصف"
-                      className={`w-full p-2 border rounded ${
-                        fieldErrors.description ? "border-red-500" : ""
+                      placeholder="أدخل وصف الورشة هنا"
+                      className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
+                        fieldErrors.description
+                          ? "border-red-500"
+                          : "border-amber-200"
                       }`}
                       rows="4"
                       required
@@ -414,56 +475,79 @@ const AddContentPage = () => {
                   </div>
                   {renderMultiInput("topics_covered", "المواضيع المغطاة")}
                   {renderMultiInput("requirements", "المتطلبات")}
-                  <div>
-                    <input
-                      type="number"
-                      name="duration"
-                      value={formData.duration}
-                      onChange={handleChange}
-                      placeholder="المدة بالأيام"
-                      className={`w-full p-2 border rounded ${
-                        fieldErrors.duration ? "border-red-500" : ""
-                      }`}
-                      required
-                    />
-                    {fieldErrors.duration && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {fieldErrors.duration}
-                      </p>
-                    )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="form-group">
+                      <label
+                        htmlFor="duration"
+                        className="block mb-2 font-semibold text-customBrown"
+                      >
+                        المدة بالأيام
+                      </label>
+                      <input
+                        type="number"
+                        id="duration"
+                        name="duration"
+                        value={formData.duration}
+                        onChange={handleChange}
+                        placeholder="أدخل المدة"
+                        className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
+                          fieldErrors.duration
+                            ? "border-red-500"
+                            : "border-amber-200"
+                        }`}
+                        required
+                      />
+                      {fieldErrors.duration && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {fieldErrors.duration}
+                        </p>
+                      )}
+                    </div>
+                    <div className="form-group">
+                      <label
+                        htmlFor="start_date"
+                        className="block mb-2 font-semibold text-customBrown"
+                      >
+                        تاريخ البدء
+                      </label>
+                      <input
+                        type="date"
+                        id="start_date"
+                        name="start_date"
+                        value={formData.start_date}
+                        onChange={handleChange}
+                        className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
+                          fieldErrors.start_date
+                            ? "border-red-500"
+                            : "border-amber-200"
+                        }`}
+                        required
+                      />
+                      {fieldErrors.start_date && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {fieldErrors.start_date}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <label className="block mb-1 font-semibold">
-                      تاريخ البدء
-                    </label>
-                    <input
-                      type="date"
-                      name="start_date"
-                      value={formData.start_date}
-                      onChange={handleChange}
-                      className={`w-full p-2 border rounded ${
-                        fieldErrors.start_date ? "border-red-500" : ""
-                      }`}
-                      required
-                    />
-                    {fieldErrors.start_date && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {fieldErrors.start_date}
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex flex-col md:flex-row md:space-x-4">
-                    <div className="w-full md:w-1/2 mb-4 md:mb-0">
-                      <label className="block mb-1 font-semibold">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="form-group">
+                      <label
+                        htmlFor="start_time"
+                        className="block mb-2 font-semibold text-customBrown"
+                      >
                         وقت البدء
                       </label>
                       <input
                         type="time"
+                        id="start_time"
                         name="start_time"
                         value={formData.start_time}
                         onChange={handleChange}
-                        className={`w-full p-2 border rounded ${
-                          fieldErrors.start_time ? "border-red-500" : ""
+                        className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
+                          fieldErrors.start_time
+                            ? "border-red-500"
+                            : "border-amber-200"
                         }`}
                         required
                       />
@@ -473,17 +557,23 @@ const AddContentPage = () => {
                         </p>
                       )}
                     </div>
-                    <div className="w-full md:w-1/2">
-                      <label className="block mb-1 font-semibold">
+                    <div className="form-group">
+                      <label
+                        htmlFor="end_time"
+                        className="block mb-2 font-semibold text-customBrown"
+                      >
                         وقت الانتهاء
                       </label>
                       <input
                         type="time"
+                        id="end_time"
                         name="end_time"
                         value={formData.end_time}
                         onChange={handleChange}
-                        className={`w-full p-2 border rounded ${
-                          fieldErrors.end_time ? "border-red-500" : ""
+                        className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
+                          fieldErrors.end_time
+                            ? "border-red-500"
+                            : "border-amber-200"
                         }`}
                         required
                       />
@@ -494,55 +584,84 @@ const AddContentPage = () => {
                       )}
                     </div>
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-600 italic">
                     * يرجى تحديد وقت بداية ونهاية الورشة
                   </div>
-                  <div>
-                    <input
-                      type="number"
-                      name="cost"
-                      value={formData.cost}
-                      onChange={handleChange}
-                      placeholder="التكلفة"
-                      className={`w-full p-2 border rounded ${
-                        fieldErrors.cost ? "border-red-500" : ""
-                      }`}
-                      required
-                    />
-                    {fieldErrors.cost && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {fieldErrors.cost}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <input
-                      type="text"
-                      name="location"
-                      value={formData.location}
-                      onChange={handleChange}
-                      placeholder="المكان"
-                      className={`w-full p-2 border rounded ${
-                        fieldErrors.location ? "border-red-500" : ""
-                      }`}
-                      required
-                    />
-                    {fieldErrors.location && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {fieldErrors.location}
-                      </p>
-                    )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="form-group">
+                      <label
+                        htmlFor="cost"
+                        className="block mb-2 font-semibold text-customBrown"
+                      >
+                        التكلفة
+                      </label>
+                      <input
+                        type="number"
+                        id="cost"
+                        name="cost"
+                        value={formData.cost}
+                        onChange={handleChange}
+                        placeholder="أدخل التكلفة"
+                        className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
+                          fieldErrors.cost
+                            ? "border-red-500"
+                            : "border-amber-200"
+                        }`}
+                        required
+                      />
+                      {fieldErrors.cost && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {fieldErrors.cost}
+                        </p>
+                      )}
+                    </div>
+                    <div className="form-group">
+                      <label
+                        htmlFor="location"
+                        className="block mb-2 font-semibold text-customBrown"
+                      >
+                        المكان
+                      </label>
+                      <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleChange}
+                        placeholder="أدخل مكان الورشة"
+                        className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
+                          fieldErrors.location
+                            ? "border-red-500"
+                            : "border-amber-200"
+                        }`}
+                        required
+                      />
+                      {fieldErrors.location && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {fieldErrors.location}
+                        </p>
+                      )}
+                    </div>
                   </div>
                   {renderMultiInput("benefits", "الفوائد")}
-                  <div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="max_participants"
+                      className="block mb-2 font-semibold text-customBrown"
+                    >
+                      الحد الأقصى للمشاركين
+                    </label>
                     <input
                       type="number"
+                      id="max_participants"
                       name="max_participants"
                       value={formData.max_participants}
                       onChange={handleChange}
-                      placeholder="الحد الأقصى للمشاركين"
-                      className={`w-full p-2 border rounded ${
-                        fieldErrors.max_participants ? "border-red-500" : ""
+                      placeholder="أدخل الحد الأقصى للمشاركين"
+                      className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
+                        fieldErrors.max_participants
+                          ? "border-red-500"
+                          : "border-amber-200"
                       }`}
                       required
                     />
@@ -552,42 +671,50 @@ const AddContentPage = () => {
                       </p>
                     )}
                   </div>
-                  <div>
-                    <input
-                      type="file"
-                      name="image"
-                      onChange={handleChange}
-                      className={`w-full p-2 border rounded ${
-                        fieldErrors.image ? "border-red-500" : ""
-                      }`}
-                      required
-                    />
-                    {fieldErrors.image && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {fieldErrors.image}
-                      </p>
-                    )}
-                  </div>
                 </>
               )}
-              <button
+              <div className="form-group">
+                <label
+                  htmlFor="image"
+                  className="block mb-2 font-semibold text-customBrown"
+                >
+                  الصورة
+                </label>
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  onChange={handleChange}
+                  className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
+                    fieldErrors.image ? "border-red-500" : "border-amber-200"
+                  }`}
+                  required
+                />
+                {fieldErrors.image && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {fieldErrors.image}
+                  </p>
+                )}
+              </div>
+              <motion.button
                 type="submit"
-                className={`bg-customBrown text-white px-4 py-2 rounded hover:bg-customBrown hover:opacity-95 w-full ${
+                className={`bg-customBrown text-white px-6 py-3 rounded-lg hover:bg-amber-700 transition-all w-full font-semibold text-lg ${
                   loading ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 disabled={loading}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 {loading
                   ? "جاري الإضافة..."
                   : contentType === "article"
                   ? "إضافة المقالة"
                   : "إضافة الورشة"}
-              </button>
+              </motion.button>
             </form>
-          </div>
+          </motion.div>
         </main>
       </div>
-      <Footer />
     </>
   );
 };

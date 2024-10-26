@@ -1,3 +1,4 @@
+import React from "react";
 import Signup from "./pages/signup";
 import Login from "./pages/login";
 import Articles from "./pages/articles";
@@ -12,6 +13,7 @@ import ProfilePage from "./pages/profile";
 import AdminDashboard from "./pages/adminDashboard";
 import HomePage from "./pages/homePage";
 import CheckoutPage from "./pages/checkOutPage";
+import Footer from "./components/footer";
 import {
   BrowserRouter as Router,
   Route,
@@ -26,13 +28,17 @@ import ForgotPassword from "./pages/forgetPassword";
 import ResetPasswordForm from "./pages/resetPassword";
 import Header from "./components/header";
 import AddContentPage from "./pages/addContent";
+import { CartProvider } from "@/components/context/CartContext";
+
 function App() {
   return (
-    <>
-      <Router basename="/masterPiece/">
-        <AppContent />
-      </Router>
-    </>
+    <Router basename="masterPiece">
+      <UserProvider>
+        <CartProvider>
+          <AppContent />
+        </CartProvider>
+      </UserProvider>
+    </Router>
   );
 }
 
@@ -40,33 +46,32 @@ function AppContent() {
   const location = useLocation();
   const admin = location.pathname.includes("admin");
   return (
-    <UserProvider>
-      {!admin && <Header />}
-      <WorkshopProvider>
-        <ProductProvider>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/workshops" element={<WorkShops />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/contactus" element={<ContactUs />} />
-            <Route path="/workshopinfo/:id" element={<WorkShopInfo />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/articles" element={<Articles />} />
-            <Route path="/articleinfo/:id" element={<ArticleInfo />} />
-            <Route path="/productinfo/:id" element={<ProductInfo />} />
-            <Route path="/shoppingcart" element={<ShoppingCartPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/otp" element={<Otp />} />
-            <Route path="/forget-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPasswordForm />} />
-            <Route path="/add-content" element={<AddContentPage />} />
-          </Routes>
-        </ProductProvider>
-      </WorkshopProvider>
-    </UserProvider>
+    <WorkshopProvider>
+      <ProductProvider>
+        {!admin && <Header />}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/workshops" element={<WorkShops />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/contactus" element={<ContactUs />} />
+          <Route path="/workshopinfo/:id" element={<WorkShopInfo />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/articles" element={<Articles />} />
+          <Route path="/articleinfo/:id" element={<ArticleInfo />} />
+          <Route path="/productinfo/:id" element={<ProductInfo />} />
+          <Route path="/shoppingcart" element={<ShoppingCartPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/otp" element={<Otp />} />
+          <Route path="/forget-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPasswordForm />} />
+          <Route path="/add-content" element={<AddContentPage />} />
+        </Routes>
+        {!admin && <Footer />}
+      </ProductProvider>
+    </WorkshopProvider>
   );
 }
 

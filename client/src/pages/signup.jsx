@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import Footer from "../components/footer";
 import Input from "../components/login&&signup/input";
 import LabelHeading from "../components/login&&signup/labelHeading";
 import Button from "../components/login&&signup/button";
@@ -160,7 +159,6 @@ function Signup() {
           path="/login"
         />
       </form>
-      <Footer />
     </>
   );
 }

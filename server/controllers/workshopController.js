@@ -50,7 +50,7 @@ const getWorkShopById = async (req, res) => {
 const addWorkShop = async (req, res) => {
   try {
     const owner_id = req.user;
-    const image = req.file.filename;
+    const image = req.file ? req.file.filename : null;
     const {
       title,
       description,
@@ -63,26 +63,50 @@ const addWorkShop = async (req, res) => {
       location,
       benefits,
       max_participants,
+      start_date,
     } = req.body;
+    console.log("req.body", req.body);
+    // Validate and format time inputs
+    const formatTime = time => {
+      const [hours, minutes] = time.split(":");
+      return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}:00`;
+    };
+
+    const formattedStartTime = formatTime(start_time);
+    const formattedEndTime = formatTime(end_time);
+    console.log("formattedStartTime", formattedStartTime);
+    console.log("formattedEndTime", formattedEndTime);
+    console.log("Received workshop data:", req.body);
+    console.log("File:", req.file);
+
     const workShop = await Workshop.create({
       owner_id,
       image,
       title,
       description,
-      topics_covered: topics_covered.join("،"),
-      requirements: requirements.join(","),
+      topics_covered: Array.isArray(topics_covered)
+        ? topics_covered.join("،")
+        : topics_covered,
+      requirements: Array.isArray(requirements)
+        ? requirements.join(",")
+        : requirements,
       duration,
-      start_time,
-      end_time,
+      start_time: formattedStartTime,
+      end_time: formattedEndTime,
       cost,
       location,
-      benefits: benefits.join("،"),
+      benefits: Array.isArray(benefits) ? benefits.join("،") : benefits,
       max_participants,
+      start_date,
     });
+
+    console.log("Created workshop:", workShop);
     res.json(workShop);
   } catch (error) {
     console.error("Error adding Workshop:", error);
-    res.status(500).json({ message: "Error adding Workshop" });
+    res
+      .status(500)
+      .json({ message: "Error adding Workshop", error: error.message });
   }
 };
 

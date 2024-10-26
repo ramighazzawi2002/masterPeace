@@ -37,7 +37,7 @@ const Input = ({ type, name, value, onChange, error }) => {
       >
         {name}
       </label>
-      {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
+      {error && <p className="mt-1 text-xs text-red-500 text-right">{error}</p>}
     </div>
   );
 };

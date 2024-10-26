@@ -6,13 +6,16 @@ import Logo from "../img/logo.webp";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "@/components/context/userData";
+import { useCart } from "@/components/context/CartContext";
 import profileImage from "../img/profile-circle-icon-512x512-zxne30hp.png";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [profile, setProfile] = useState(null);
   const { isLoggedIn, setIsLoggedIn, isGoogle } = useUserContext();
+  const { cartItemsCount, updateCartCount } = useCart();
   const navigate = useNavigate();
+
   useEffect(() => {
     (async () => {
       try {
@@ -25,11 +28,17 @@ const Header = () => {
         );
         setProfile(getProfileResponse.data);
         console.log("getProfileResponse: ", getProfileResponse.data);
+
+        // Update cart count
+        if (loginResponse.data.isLoggedIn) {
+          updateCartCount();
+        }
       } catch (err) {
         setIsLoggedIn(false);
       }
     })();
-  }, [isGoogle]);
+  }, [isGoogle, updateCartCount]);
+
   const navItems = [
     { to: "/", label: "الصفحة الرئيسية" },
     { to: "/workshops", label: "ورشات" },
@@ -104,9 +113,14 @@ const Header = () => {
               </Link>
               <Link
                 to="/shoppingCart"
-                className="text-white hover:text-customYellow"
+                className="text-white hover:text-customYellow relative"
               >
                 <ShoppingCart size={24} />
+                {cartItemsCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-customYellow text-customBrown rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                    {cartItemsCount}
+                  </span>
+                )}
               </Link>
             </>
           )}

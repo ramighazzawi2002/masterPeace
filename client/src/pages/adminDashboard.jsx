@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import {
   FiHome,
   FiFileText,
-  FiTool,
-  FiPackage,
   FiUsers,
-  FiSettings,
   FiLogOut,
+  FiBook,
+  FiShoppingBag,
+  FiCheckSquare,
+  FiMail,
 } from "react-icons/fi";
 import Swal from "sweetalert2";
 import OverviewTab from "../components/OverviewTab";
@@ -14,11 +15,12 @@ import ArticlesTab from "../components/ArticlesTab";
 import WorkshopsTab from "../components/WorkshopsTab";
 import ProductsTab from "../components/ProductsTab";
 import UsersTab from "../components/UsersTab";
-import SettingsTab from "../components/SettingsTab";
+import UnapprovedArticlesTab from "../components/UnapprovedArticlesTab";
+import UnapprovedWorkshopsTab from "../components/UnapprovedWorkshopsTab";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../config";
-
+import ContactMessagesTab from "../components/ContactMessagesTab";
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [websiteStatsData, setWebsiteStatsData] = useState([]);
@@ -132,36 +134,36 @@ const AdminDashboard = () => {
           setArticles([...articles, response.data]);
           break;
         case "workshop":
-          newItem = {
+          const newWorkshop = {
             title: "ورشة جديدة",
             description: "",
             start_time: new Date().toISOString(),
             max_participants: 10,
             owner_id: 1,
           };
-          const workshopResponse = await axios.post(
+          response = await axios.post(
             `${BASE_URL}/admin/workshops`,
-            newItem,
+            newWorkshop,
             { withCredentials: true }
           );
-          setWorkshops([...workshops, workshopResponse.data]);
+          setWorkshops([...workshops, response.data]);
           break;
         case "product":
-          newItem = {
+          const newProduct = {
             name: "منتج جديد",
             description: "",
             price: 0,
             stock: 0,
             author_id: 1,
           };
-          const productResponse = await axios.post(
+          response = await axios.post(
             `${BASE_URL}/admin/products`,
-            newItem,
+            newProduct,
             {
               withCredentials: true,
             }
           );
-          setProducts([...products, productResponse.data]);
+          setProducts([...products, response.data]);
           break;
       }
       Swal.fire({
@@ -281,6 +283,48 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleEditWorkshop = async (id, formData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/admin/workshops/${id}`,
+        formData,
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      setWorkshops(
+        workshops.map(workshop =>
+          workshop.id === id ? response.data : workshop
+        )
+      );
+      return response.data;
+    } catch (error) {
+      console.error(`Error editing workshop:`, error);
+      throw error;
+    }
+  };
+
+  const handleEditProduct = async (id, formData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/admin/products/${id}`,
+        formData,
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      setProducts(
+        products.map(product => (product.id === id ? response.data : product))
+      );
+      return response.data;
+    } catch (error) {
+      console.error(`Error editing product:`, error);
+      throw error;
+    }
+  };
+
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -313,34 +357,50 @@ const AdminDashboard = () => {
         return (
           <WorkshopsTab
             workshops={handleSearch(workshops)}
-            onAddWorkshop={() => handleAddItem("workshop")}
+            onAddWorkshop={formData => handleAddItem("workshop", formData)}
             onDeleteWorkshop={id => handleDeleteItem("workshop", id)}
+            onEditWorkshop={handleEditWorkshop}
           />
         );
       case "products":
         return (
           <ProductsTab
             products={handleSearch(products)}
-            onAddProduct={() => handleAddItem("product")}
+            onAddProduct={formData => handleAddItem("product", formData)}
             onDeleteProduct={id => handleDeleteItem("product", id)}
+            onEditProduct={handleEditProduct}
           />
         );
       case "users":
         return <UsersTab users={handleSearch(users)} />;
-      case "settings":
-        return <SettingsTab />;
+      case "unapproved-articles":
+        return <UnapprovedArticlesTab />;
+      case "unapproved-workshops":
+        return <UnapprovedWorkshopsTab />;
+      case "contact-messages":
+        return <ContactMessagesTab />;
       default:
         return null;
     }
   };
 
   const tabs = [
-    { id: "overview", name: "نظرة عامة", icon: FiHome },
-    { id: "articles", name: "المقالات", icon: FiFileText },
-    { id: "workshops", name: "الورشات", icon: FiTool },
-    { id: "products", name: "المنتجات", icon: FiPackage },
-    { id: "users", name: "المستخدمون", icon: FiUsers },
-    { id: "settings", name: "الإعدادات", icon: FiSettings },
+    { name: "لوحة التحكم", icon: FiHome, value: "overview" },
+    { name: "المقالات", icon: FiFileText, value: "articles" },
+    { name: "الورش", icon: FiBook, value: "workshops" },
+    { name: "المنتجات", icon: FiShoppingBag, value: "products" },
+    { name: "المستخدمين", icon: FiUsers, value: "users" },
+    {
+      name: "المقالات غير المعتمدة",
+      icon: FiCheckSquare,
+      value: "unapproved-articles",
+    },
+    {
+      name: "الورش غير المعتمدة",
+      icon: FiCheckSquare,
+      value: "unapproved-workshops",
+    },
+    { name: "رسائل الاتصال", icon: FiMail, value: "contact-messages" },
   ];
 
   return (
@@ -350,20 +410,23 @@ const AdminDashboard = () => {
         <div className="p-4">
           <h1 className="text-2xl font-bold mb-4">لوحة التحكم</h1>
           <nav>
-            {tabs.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center w-full p-2 rounded-lg mb-2 ${
-                  activeTab === tab.id
-                    ? "bg-brown-700 text-white"
-                    : "text-brown-300 hover:bg-brown-700 hover:text-white"
-                } transition duration-300`}
-              >
-                <tab.icon className="mr-2" />
-                {tab.name}
-              </button>
-            ))}
+            {tabs.map(tab => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.value}
+                  onClick={() => setActiveTab(tab.value)}
+                  className={`flex items-center w-full p-2 rounded-lg mb-2 ${
+                    activeTab === tab.value
+                      ? "bg-brown-700 text-white"
+                      : "text-brown-300 hover:bg-brown-700 hover:text-white"
+                  } transition duration-300`}
+                >
+                  <Icon className="ml-2" />
+                  {tab.name}
+                </button>
+              );
+            })}
             <button
               onClick={handleLogout}
               className="flex items-center w-full p-2 rounded-lg mb-2 text-brown-300 hover:bg-brown-700 hover:text-white transition duration-300"

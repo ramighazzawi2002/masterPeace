@@ -15,6 +15,7 @@ module.exports = {
           is_approved: true,
           createdAt: new Date(),
           updatedAt: new Date(),
+          image: "mosaic-postcard-c-beck-1-1.jpg",
         },
         {
           title: "المأكولات الشعبية الأردنية",
@@ -25,6 +26,7 @@ module.exports = {
           is_approved: true,
           createdAt: new Date(),
           updatedAt: new Date(),
+          image: "المأكولات_الشعبية_الاردنية.jpg",
         },
       ],
       {}

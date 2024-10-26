@@ -12,6 +12,7 @@ const cors = require("cors");
 const express = require("express");
 const path = require("path");
 require("dotenv").config();
+const axios = require("axios");
 
 const cookieParser = require("cookie-parser");
 
@@ -62,6 +63,34 @@ const adminRouter = require("./routes/adminRouter");
 app.use("/admin", adminRouter);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+app.post("/translate", async (req, res) => {
+  try {
+    const { text, from = "ar", to = "en" } = req.body;
+
+    const response = await axios.get(
+      "https://api.mymemory.translated.net/get",
+      {
+        params: {
+          q: text,
+          langpair: `${from}|${to}`,
+        },
+      }
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Translation error:", error.message);
+    res.status(500).json({
+      error: "Translation failed",
+      details: error.message,
+    });
+  }
+});
+
+const homeRoutes = require("./routes/homeRoutes");
+
+app.use("/api/home", homeRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
