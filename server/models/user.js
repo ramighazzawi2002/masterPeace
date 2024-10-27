@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "owner_id",
       });
       User.hasMany(models.Product, { as: "products", foreignKey: "author_id" });
-      User.hasOne(models.UserProfile);
       User.hasMany(models.WorkshopRegistration, {
         foreignKey: "user_id",
       });
@@ -50,6 +49,7 @@ module.exports = (sequelize, DataTypes) => {
       //   type: DataTypes.ENUM("user", "admin"),
       //   defaultValue: "user",
       // },
+      is_active: { type: DataTypes.BOOLEAN, defaultValue: true },
     },
     {
       sequelize,

@@ -40,6 +40,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      is_active: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

@@ -80,7 +80,7 @@ function Articles() {
                     <div className="flex justify-end">
                       <Link
                         to={`/articleinfo/${article.id}`}
-                        className="bg-customGreen text-white px-4 py-2 rounded-full flex items-center hover:bg-customBrown transition duration-300"
+                        className="bg-customGreen/90 text-white px-4 py-2 rounded-full flex items-center hover:bg-customGreen transition duration-300"
                       >
                         <BookOpen className="ml-2" size={18} />
                         اقرأ المزيد

@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Calendar,
-  Clock,
-  MapPin,
-  Users,
-} from "lucide-react";
+
 import { Link } from "react-router-dom";
 import SearchBar from "../components/searchBar";
 import Pagination from "../components/Pagination";
@@ -90,7 +83,7 @@ function WorkShops() {
                       </span>
                       <Link
                         to={`/workshopinfo/${workshop.id}`}
-                        className="bg-customGreen text-white px-4 py-2 rounded-full flex items-center hover:bg-customBrown transition duration-300"
+                        className="bg-customGreen/90 text-white px-4 py-2 rounded-full flex items-center hover:bg-customGreen transition duration-300"
                       >
                         تفاصيل الورشة
                       </Link>

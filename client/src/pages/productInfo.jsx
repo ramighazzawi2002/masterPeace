@@ -182,13 +182,13 @@ const ProductDetails = () => {
   return (
     <>
       <div className="container mx-auto px-4 py-8 my-20">
-        <div className="flex flex-col md:flex-row-reverse">
+        <div className="flex flex-col items-center  md:flex-row-reverse">
           {/* Product Image */}
-          <div className="md:w-1/2 md:pr-8">
+          <div className="md:w-1/2  md:pr-8">
             <img
               src={`http://localhost:5000/uploads/${product.image}`}
               alt="فسيفساء أردنية"
-              className="w-full rounded-lg shadow-lg"
+              className="h-[500px] w-[100%] rounded-lg shadow-lg"
             />
           </div>
 
@@ -246,18 +246,6 @@ const ProductDetails = () => {
               <ShoppingCart className="ml-2" />
               أضف إلى السلة
             </button>
-            {/* Additional Info */}
-            <div className="mt-8">
-              <h3 className="text-lg font-semibold text-gray-800">
-                تفاصيل المنتج
-              </h3>
-              <ul className="list-disc list-inside mt-2 text-gray-600">
-                <li>المواد: بلاط من الحجر والزجاج</li>
-                <li>الحجم: تقريبا 30 سم × 30 سم</li>
-                <li>صناعة يدوية في الأردن</li>
-                <li>مناسبة للديكور الجداري</li>
-              </ul>
-            </div>
           </div>
         </div>
         <section className="mt-12">
