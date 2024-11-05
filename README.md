@@ -90,7 +90,7 @@ MasterPiece is a comprehensive platform that offers a variety of features includ
 - [Figma](https://www.figma.com/design/ttzneYCK8kreNzmudfOujZ/masterpeace?node-id=0-1&t=pjbBfw3moW1ecDCS-1)
 - [Presentation](https://www.canva.com/design/DAGVmh2l5Xs/GKPwSdZHXETenqTC0XAV7Q/edit?utm_content=DAGVmh2l5Xs&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 - [Project Documentation](./Jordan Heritage Project Brief.pdf)
-- [Project Brief](https://example.com/brief)
+- [Project Brief](./Jordan_Heritage_Project_Documentation.pdf)
 
 ## Note
 
