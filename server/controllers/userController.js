@@ -18,7 +18,6 @@ const sendOtp = async (req, res) => {
         .json({ message: "البريد الإلكتروني مستخدم بالفعل" });
     }
     const otp = generateOtp();
-
     // Store OTP in Redis with 1 minutes expiration
     await redis.set(`otp:${email}`, otp, "EX", 60);
 
@@ -40,6 +39,7 @@ const sendOtp = async (req, res) => {
 
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
+        console.log("error", error);
         res.status(500).json({ error });
       } else {
         res.json({ message: "تم إرسال رمز التحقق بنجاح" });

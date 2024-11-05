@@ -62,7 +62,7 @@ const OverviewTab = ({ websiteStatsData, activitySummaryData }) => (
         </ResponsiveContainer>
       </div>
     </div>
-    <div className="col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    {/* <div className="col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <StatCard
         icon={FiUsers}
         title="إجمالي المستخدمين"
@@ -87,27 +87,27 @@ const OverviewTab = ({ websiteStatsData, activitySummaryData }) => (
         value="3.2%"
         change="+0.8%"
       />
-    </div>
+    </div> */}
   </div>
 );
 
-const StatCard = ({ icon: Icon, title, value, change }) => (
-  <div className="bg-white p-6 rounded-lg shadow">
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-sm text-gray-500 mb-1">{title}</p>
-        <p className="text-2xl font-semibold">{value}</p>
-      </div>
-      <Icon className="text-3xl text-brown-500" />
-    </div>
-    <p
-      className={`text-sm mt-2 ${
-        change.startsWith("+") ? "text-green-500" : "text-red-500"
-      }`}
-    >
-      {change}
-    </p>
-  </div>
-);
+// const StatCard = ({ icon: Icon, title, value, change }) => (
+//   <div className="bg-white p-6 rounded-lg shadow">
+//     <div className="flex items-center justify-between">
+//       <div>
+//         <p className="text-sm text-gray-500 mb-1">{title}</p>
+//         <p className="text-2xl font-semibold">{value}</p>
+//       </div>
+//       <Icon className="text-3xl text-brown-500" />
+//     </div>
+//     <p
+//       className={`text-sm mt-2 ${
+//         change.startsWith("+") ? "text-green-500" : "text-red-500"
+//       }`}
+//     >
+//       {change}
+//     </p>
+//   </div>
+// );
 
 export default OverviewTab;

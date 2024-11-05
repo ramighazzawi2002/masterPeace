@@ -107,7 +107,7 @@ const Header = () => {
                       : profileImage
                   }
                   className={`h-9 w-9 rounded-full ${
-                    !profile && "invert"
+                    !profile?.image && "invert"
                   } true`}
                 />
               </Link>

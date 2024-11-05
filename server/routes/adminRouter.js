@@ -92,4 +92,11 @@ router.post(
   adminController.replyContactMessage
 );
 
+router.put(
+  "/users/:id/toggle-status",
+  auth,
+  adminAuth,
+  adminController.toggleUserStatus
+);
+
 module.exports = router;

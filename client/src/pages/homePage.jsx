@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 import { BASE_URL } from "../config";
+import HeritageChat from "../components/HeritageChat";
 
 function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);

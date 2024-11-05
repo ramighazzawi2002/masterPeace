@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Edit, Camera } from "lucide-react";
 import axios from "axios";
+import profileImage from "../../img/profile-circle-icon-512x512-zxne30hp.png";
 
 const ProfileHeader = ({ profile, setProfile, fetchProfile }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -63,13 +64,13 @@ const ProfileHeader = ({ profile, setProfile, fetchProfile }) => {
             <img
               className={`w-32 h-32 rounded-full border-4 border-white bg-white object-cover ${
                 profile.auth_type === "local" ? "cursor-pointer" : ""
-              }`}
+              } `}
               src={`${
                 profile.image
                   ? profile.auth_type === "local"
                     ? `http://localhost:5000/uploads/${profile.image}`
-                    : profile.image
-                  : "https://via.placeholder.com/128"
+                    : profile?.image
+                  : profileImage
               }`}
               alt="Profile"
               onClick={handleImageClick}

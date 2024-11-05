@@ -92,6 +92,11 @@ const homeRoutes = require("./routes/homeRoutes");
 
 app.use("/api/home", homeRoutes);
 
+const chatRouter = require("./routes/chatRouter");
+
+// Chat Router
+app.use("/api", chatRouter);
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

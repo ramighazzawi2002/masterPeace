@@ -29,6 +29,7 @@ import ResetPasswordForm from "./pages/resetPassword";
 import Header from "./components/header";
 import AddContentPage from "./pages/addContent";
 import { CartProvider } from "@/components/context/CartContext";
+import HeritageChat from "./components/HeritageChat";
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function AppContent() {
           <Route path="/add-content" element={<AddContentPage />} />
         </Routes>
         {!admin && <Footer />}
+        {!admin && <HeritageChat />}
       </ProductProvider>
     </WorkshopProvider>
   );

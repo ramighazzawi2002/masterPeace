@@ -374,6 +374,42 @@ const replyContactMessage = async (req, res) => {
     res.status(500).json({ message: "Error sending reply" });
   }
 };
+const toggleUserStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { is_active } = req.body;
+
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Don't allow deactivating admin users
+    // if (user.is_admin) {
+    //   return res.status(403).json({
+    //     message: "Cannot change status of admin users",
+    //   });
+    // }
+
+    user.is_active = is_active;
+    await user.save();
+
+    res.json({
+      message: "User status updated successfully",
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        is_active: user.is_active,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating user status:", error);
+    res.status(500).json({ message: "Error updating user status" });
+  }
+};
 
 // Add this to the module.exports
 module.exports = {
@@ -393,4 +429,5 @@ module.exports = {
   approveWorkshop,
   getContactMessages,
   replyContactMessage,
+  toggleUserStatus,
 };

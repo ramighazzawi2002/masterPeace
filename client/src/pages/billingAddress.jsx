@@ -71,7 +71,7 @@ const BillingAddressForm = ({ onSubmit }) => {
         <CardHeader className="bg-customBrown text-white p-6">
           <CardTitle className="text-3xl font-bold text-center flex items-center justify-center">
             <MapPin className="mr-2" size={28} />
-            عنوان الفواتير
+            العنوان
           </CardTitle>
         </CardHeader>
         <CardContent className="p-8">

@@ -277,7 +277,7 @@ const CheckoutPage = () => {
 
   if (paymentSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-customGreen/20 to-white flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-b from-customGreen/20 to-white flex items-center justify-center px-4 mt-20">
         <Card className="max-w-2xl w-full bg-white shadow-2xl rounded-lg overflow-hidden">
           <CardHeader className="bg-customGreen text-white p-8">
             <div className="flex items-center justify-center mb-4">

@@ -201,7 +201,7 @@ function WorkshopInfo() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-green-400 to-blue-500 rounded-xl shadow-lg p-8 text-white">
+            <div className="bg-customBrown rounded-xl shadow-lg p-8 text-white">
               <h2 className="text-3xl font-bold mb-4">
                 سجل الآن وابدأ رحلة التعلم!
               </h2>
@@ -211,10 +211,9 @@ function WorkshopInfo() {
               </p>
               <Button
                 onClick={handleRegistration}
-                className={`w-full py-6 text-xl rounded-full bg-white text-green-500 hover:bg-green-50 transition-all duration-300 transform hover:scale-105`}
+                className={`w-full py-6 text-xl rounded-full bg-white text-customBrown hover:bg-green-50 transition-all duration-300 transform hover:scale-105`}
               >
                 {isRegistered ? "تم التسجيل" : "سجل الآن"}
-                <ArrowRight className="ml-2 h-6 w-6" />
               </Button>
             </div>
           </div>
@@ -226,7 +225,7 @@ function WorkshopInfo() {
 
 function renderInfoBadge(icon, text) {
   return (
-    <div className="bg-white bg-opacity-20 rounded-full px-4 py-2 flex items-center space-x-2">
+    <div className="bg-white bg-opacity-20 rounded-full px-4 py-2 flex items-center gap-x-2">
       {icon}
       <span>{text}</span>
     </div>
@@ -236,14 +235,14 @@ function renderInfoBadge(icon, text) {
 function renderFeatureCard(title, icon, items) {
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
-      <div className="bg-gradient-to-r from-green-400 to-blue-500 p-6 flex items-center space-x-4">
+      <div className="bg-customBrown p-6 flex items-center gap-4">
         <div className="bg-white p-3 rounded-full">{icon}</div>
         <h3 className="text-2xl font-semibold text-white">{title}</h3>
       </div>
       <ul className="p-6 space-y-4">
         {items.map((item, index) => (
           <li key={index} className="flex items-start">
-            <CheckCircle className="h-6 w-6 text-green-500 mr-2 mt-1 flex-shrink-0" />
+            <CheckCircle className="h-6 w-6 text-green-500 ml-2 mt-1 flex-shrink-0" />
             <span className="text-lg text-gray-700">{item}</span>
           </li>
         ))}

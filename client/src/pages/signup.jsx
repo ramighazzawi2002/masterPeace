@@ -72,7 +72,6 @@ function Signup() {
         await axios.post("http://localhost:5000/user/send-otp", {
           email: formData.email,
         });
-
         setEmail(formData.email);
         setUserName(formData.username);
         setPassword(formData.password);
