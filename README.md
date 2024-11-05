@@ -59,28 +59,11 @@ MasterPiece is a comprehensive platform that offers a variety of features includ
    cd ../server
    npm start
    ```
-
+   
 ## Usage
 
 - Open your browser and navigate to `http://localhost:5173/masterPiece` to access the frontend.
 - The backend server will be running on `http://localhost:5000`.
-
-## Contribution Guidelines
-
-1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b feature-branch
-   ```
-3. Make your changes and commit them:
-   ```bash
-   git commit -m "Description of your changes"
-   ```
-4. Push to the branch:
-   ```bash
-   git push origin feature-branch
-   ```
-5. Create a pull request.
 
 ## Project Structure
 
