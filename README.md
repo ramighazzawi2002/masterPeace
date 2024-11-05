@@ -89,8 +89,8 @@ MasterPiece is a comprehensive platform that offers a variety of features includ
 - [Trello](https://trello.com/invite/b/672a01eeaa4968b12966b79c/ATTI9144b0c143a353fb99ea9992fac4f77eA82F70B6/master-piece)
 - [Figma](https://www.figma.com/design/ttzneYCK8kreNzmudfOujZ/masterpeace?node-id=0-1&t=pjbBfw3moW1ecDCS-1)
 - [Presentation](https://www.canva.com/design/DAGVmh2l5Xs/GKPwSdZHXETenqTC0XAV7Q/edit?utm_content=DAGVmh2l5Xs&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
-- [Project Documentation](./Jordan Heritage Project Brief.pdf)
-- [Project Brief](./Jordan_Heritage_Project_Documentation.pdf)
+- [Project Documentation](./Jordan_Heritage_Project_Documentation.pdf)Jordan_Heritage_Project_Brief.pdf
+- [Project Brief](./Jordan_Heritage_Project_Brief.pdf)
 
 ## Note
 
