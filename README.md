@@ -59,28 +59,11 @@ MasterPiece is a comprehensive platform that offers a variety of features includ
    cd ../server
    npm start
    ```
-
+   
 ## Usage
 
 - Open your browser and navigate to `http://localhost:5173/masterPiece` to access the frontend.
 - The backend server will be running on `http://localhost:5000`.
-
-## Contribution Guidelines
-
-1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b feature-branch
-   ```
-3. Make your changes and commit them:
-   ```bash
-   git commit -m "Description of your changes"
-   ```
-4. Push to the branch:
-   ```bash
-   git push origin feature-branch
-   ```
-5. Create a pull request.
 
 ## Project Structure
 
@@ -101,6 +84,13 @@ MasterPiece is a comprehensive platform that offers a variety of features includ
 - **Author**: Rami Ghazzawi
 - **Email**: rami.ghazzawiabed@gmail.com
 
+## Project Links
+
+- [Trello](https://trello.com/invite/b/672a01eeaa4968b12966b79c/ATTI9144b0c143a353fb99ea9992fac4f77eA82F70B6/master-piece)
+- [Figma](https://www.figma.com/design/ttzneYCK8kreNzmudfOujZ/masterpeace?node-id=0-1&t=pjbBfw3moW1ecDCS-1)
+- [Presentation](https://www.canva.com/design/DAGVmh2l5Xs/GKPwSdZHXETenqTC0XAV7Q/edit?utm_content=DAGVmh2l5Xs&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+- [Project Documentation](./Jordan_Heritage_Project_Documentation.pdf)
+- [Project Brief](./Jordan_Heritage_Project_Brief.pdf)
 
 ## Note
 
