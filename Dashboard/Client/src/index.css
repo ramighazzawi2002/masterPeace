@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html {
+  direction: rtl;
+}
+
+@layer components {
+  .responsive-table-wrapper {
+    @apply w-full overflow-x-auto shadow-md sm:rounded-lg;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .responsive-table {
+    @apply min-w-full divide-y divide-gray-200;
+  }
+
+  .responsive-table th {
+    @apply px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider;
+  }
+
+  .responsive-table td {
+    @apply px-4 py-3 whitespace-nowrap;
+  }
+}
