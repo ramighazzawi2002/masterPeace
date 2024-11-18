@@ -10,7 +10,7 @@ import {
   FiMail,
 } from "react-icons/fi";
 import Swal from "sweetalert2";
-import OverviewTab from "../components/OverviewTab";
+import OverviewTab from "../Components/OverviewTab";
 import ArticlesTab from "../components/ArticlesTab";
 import WorkshopsTab from "../components/WorkshopsTab";
 import ProductsTab from "../Components/ProductsTab";

@@ -41,7 +41,7 @@ const WorkshopsSection = ({ workshops, setWorkshops }) => {
         ))}
       </div>
       {totalPages > 1 && (
-        <div className="mt-6 flex justify-center items-center space-x-2">
+        <div className="mt-6 flex justify-center items-center gap-x-2">
           <button
             onClick={() => paginate(currentPage - 1)}
             disabled={currentPage === 1}

@@ -278,7 +278,7 @@ const ProductDetails = () => {
 
             {/* Add to Cart Button */}
             <button
-              className="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 flex items-center justify-center"
+              className="mt-6 w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 flex items-center justify-center"
               onClick={addToCart}
             >
               <ShoppingCart className="ml-2" />

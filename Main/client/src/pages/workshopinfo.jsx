@@ -128,7 +128,7 @@ function WorkshopInfo() {
           {alert && (
             <Alert
               variant={alert.type}
-              className="mb-6 fixed top-20 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-lg shadow-lg mt-10 bg-gradient-to-r from-green-400 to-blue-500"
+              className="mb-6 fixed top-20 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-lg shadow-lg mt-10 bg-green-600 text-white"
             >
               <div className="flex items-start">
                 <AlertCircle className="h-5 w-5 ml-2" />
@@ -138,13 +138,13 @@ function WorkshopInfo() {
                   </AlertTitle>
                   <AlertDescription className="flex gap-4 items-center">
                     <div>{alert.description}</div>
-                    <div>{alert.action}</div>
+                    <div className="text-green-500">{alert.action}</div>
                   </AlertDescription>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="ml-2 -mr-2 -mt-2 hover:bg-opacity-20 hover:bg-gray-500 rounded-full p-1"
+                  className="ml-2 -mr-2 -mt-2 hover:bg-opacity-20 hover:bg-green-700 rounded-full p-1"
                   onClick={closeAlert}
                 >
                   <X className="h-4 w-4" />

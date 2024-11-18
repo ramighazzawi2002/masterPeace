@@ -1,5 +1,7 @@
 const { Workshop } = require("../models");
 const Op = require("sequelize").Op;
+const { WorkshopRegistration } = require("../models");
+const { User } = require("../models");
 
 const getWorkShops = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -69,6 +71,7 @@ const addWorkShop = async (req, res) => {
   try {
     const owner_id = req.user;
     const image = req.file ? req.file.filename : null;
+    console.log("req.body", req.body);
     const {
       title,
       description,
@@ -80,7 +83,7 @@ const addWorkShop = async (req, res) => {
       location,
       benefits,
       max_participants,
-      date,
+      start_date,
     } = req.body;
     console.log("req.body", req.body);
     // Validate and format time inputs
@@ -109,7 +112,7 @@ const addWorkShop = async (req, res) => {
         : requirements,
       start_time: formattedStartTime,
       end_time: formattedEndTime,
-      date,
+      date: start_date,
       cost,
       location,
       benefits: Array.isArray(benefits) ? benefits.join("،") : benefits,
@@ -179,10 +182,47 @@ const updateWorkShop = async (req, res) => {
   }
 };
 
+const deleteWorkShop = async (req, res) => {
+  try {
+    await Workshop.destroy({ where: { id: req.params.id } });
+    res.json({ message: "Workshop deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting Workshop:", error);
+    res.status(500).json({ message: "Error deleting Workshop" });
+  }
+};
+
+const getWorkshopRegistrations = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const registrations = await WorkshopRegistration.findAll({
+      where: { workshop_id: id },
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["id", "username", "email"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.json(registrations);
+  } catch (error) {
+    console.error("Error fetching workshop registrations:", error);
+    res.status(500).json({
+      message: "Error fetching workshop registrations",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getWorkShops,
   getWorkShopById,
   addWorkShop,
   getWorkShopByUserID,
   updateWorkShop,
+  deleteWorkShop,
+  getWorkshopRegistrations,
 };

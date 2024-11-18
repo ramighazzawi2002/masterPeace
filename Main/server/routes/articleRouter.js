@@ -7,6 +7,7 @@ const {
   addArticle,
   getArticleByUserID,
   updateArticle,
+  deleteArticle,
 } = require("../controllers/articleController");
 const express = require("express");
 const router = express.Router();
@@ -21,5 +22,6 @@ router.put("/delete-comment/:id", deleteComment);
 router.post("/add-article", auth, upload.single("image"), addArticle);
 router.get("/get-by-user", auth, getArticleByUserID);
 router.put("/update", updateArticle);
+router.delete("/delete/:id", auth, deleteArticle);
 
 module.exports = router;

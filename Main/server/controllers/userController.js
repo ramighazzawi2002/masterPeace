@@ -99,7 +99,9 @@ const verifyOtp = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ where: { email, auth_type: "local" } });
+    const user = await User.findOne({
+      where: { email, auth_type: "local", is_active: true },
+    });
     if (!user) {
       return res.status(400).json({ message: "البريد الإلكتروني غير مسجل" });
     }

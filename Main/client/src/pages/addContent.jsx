@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { debounce } from "lodash";
 import { motion } from "framer-motion";
 import SEO from "../components/SEO";
+import Swal from "sweetalert2";
 
 const AddContentPage = () => {
   const navigate = useNavigate();
@@ -52,6 +52,28 @@ const AddContentPage = () => {
     });
     setFieldErrors({});
   }, [contentType]);
+
+  useEffect(() => {
+    if (error) {
+      Swal.fire({
+        title: "خطأ",
+        text: error,
+        icon: "error",
+      });
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      Swal.fire({
+        title: "نجاح",
+        text: success,
+        icon: "success",
+      }).then(() => {
+        navigate("/profile");
+      });
+    }
+  }, [success, navigate]);
 
   const handleChange = e => {
     const { name, value, type, files } = e.target;
@@ -247,9 +269,6 @@ const AddContentPage = () => {
       });
       console.log("Server response:", response.data);
       setSuccess("تمت إضافة المحتوى بنجاح");
-      setTimeout(() => {
-        navigate("/profile");
-      }, 2000);
     } catch (error) {
       console.error("Error adding content:", error);
       if (error.response) {
@@ -327,24 +346,13 @@ const AddContentPage = () => {
             <h2 className="text-3xl font-bold mb-6 text-center text-customBrown">
               إضافة محتوى جديد
             </h2>
-            {error && (
-              <Alert variant="destructive" className="mb-6">
-                <AlertTitle>خطأ</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-            {success && (
-              <Alert variant="success" className="mb-6">
-                <AlertTitle>نجاح</AlertTitle>
-                <AlertDescription>{success}</AlertDescription>
-              </Alert>
-            )}
             <div className="mb-6">
               <label className="block mb-2 font-semibold text-customBrown">
                 نوع المحتوى:
               </label>
               <div className="flex justify-center gap-4">
                 <button
+                  type="button"
                   onClick={() => setContentType("article")}
                   className={`px-6 py-2 rounded-full transition-all ${
                     contentType === "article"
@@ -355,6 +363,7 @@ const AddContentPage = () => {
                   مقالة
                 </button>
                 <button
+                  type="button"
                   onClick={() => setContentType("workshop")}
                   className={`px-6 py-2 rounded-full transition-all ${
                     contentType === "workshop"
@@ -607,7 +616,7 @@ const AddContentPage = () => {
                         name="cost"
                         value={formData.cost}
                         onChange={handleChange}
-                        placeholder="أدخل التكلفة"
+                        placeholder="أدخل تكلفة الورشة"
                         className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-customBrown transition-all ${
                           fieldErrors.cost
                             ? "border-red-500"
@@ -620,6 +629,9 @@ const AddContentPage = () => {
                           {fieldErrors.cost}
                         </p>
                       )}
+                      <p className="text-sm text-gray-500 mt-1">
+                        * سيتم خصم 7% من قيمة كل تسجيل كرسوم للمنصة
+                      </p>
                     </div>
                     <div className="form-group">
                       <label
@@ -704,7 +716,7 @@ const AddContentPage = () => {
               </div>
               <motion.button
                 type="submit"
-                className={`bg-customBrown text-white px-6 py-3 rounded-lg hover:bg-amber-700 transition-all w-full font-semibold text-lg ${
+                className={`bg-customBrown text-white px-6 py-3 rounded-lg hover:bg-customBrown/80 transition-all w-full font-semibold text-lg ${
                   loading ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 disabled={loading}

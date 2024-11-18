@@ -55,32 +55,12 @@ function AppContent() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/articles" element={<Articles />} />
           <Route path="/forget-password" element={<ForgotPassword />} />
-
+          <Route path="/workshopinfo/:id" element={<WorkShopInfo />} />
+          <Route path="/articleinfo/:id" element={<ArticleInfo />} />
+          <Route path="/productinfo/:id" element={<ProductInfo />} />
+          <Route path="/otp" element={<Otp />} />
+          <Route path="/reset-password" element={<ResetPasswordForm />} />
           {/* Protected Routes */}
-          <Route
-            path="/workshopinfo/:id"
-            element={
-              <ProtectedRoute>
-                <WorkShopInfo />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/articleinfo/:id"
-            element={
-              <ProtectedRoute>
-                <ArticleInfo />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/productinfo/:id"
-            element={
-              <ProtectedRoute>
-                <ProductInfo />
-              </ProtectedRoute>
-            }
-          />
           <Route
             path="/shoppingcart"
             element={
@@ -105,8 +85,7 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-          <Route path="/otp" element={<Otp />} />
-          <Route path="/reset-password" element={<ResetPasswordForm />} />
+
           <Route
             path="/add-content"
             element={

@@ -148,8 +148,10 @@ const getAdminDashboardData = async (req, res) => {
       })) || 0;
 
     // Calculate growth percentages for amounts
-    const totalAmount = totalOrdersAmount + totalWorkshopRegistrationsAmount;
-    const lastMonthTotal = lastMonthOrdersAmount + lastMonthWorkshopAmount;
+    const totalAmount =
+      totalOrdersAmount + totalWorkshopRegistrationsAmount * 0.07;
+    const lastMonthTotal =
+      lastMonthOrdersAmount + lastMonthWorkshopAmount * 0.07;
     const amountGrowth =
       totalAmount > 0 ? ((lastMonthTotal / totalAmount) * 100).toFixed(1) : "0";
 

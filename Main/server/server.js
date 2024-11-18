@@ -36,16 +36,40 @@ app.use(helmet());
 // Configure specific security headers
 app.use(
   helmet({
+    // تكوين سياسة أمان المحتوى (Content Security Policy)
+    // هذا يحدد من أين يمكن تحميل الموارد المختلفة مثل الصور والنصوص البرمجية وغيرها
     contentSecurityPolicy: {
       directives: {
+        // defaultSrc: يحدد السياسة الافتراضية لجميع أنواع الموارد
+        // 'self' يعني فقط من نفس المصدر (نفس الدومين)
         defaultSrc: ["'self'"],
+
+        // connectSrc: يحدد المواقع التي يمكن الاتصال بها عبر Ajax أو WebSocket
+        // هنا نسمح بالاتصال مع الخادم المحلي على المنفذ 5000
         connectSrc: ["'self'", "http://localhost:5000"],
+
+        // imgSrc: يحدد من أين يمكن تحميل الصور
+        // data: للصور المشفرة base64
+        // https: يسمح بتحميل الصور من أي موقع آمن
         imgSrc: ["'self'", "data:", "http://localhost:5000", "https:"],
+
+        // scriptSrc: يحدد من أين يمكن تحميل وتنفيذ JavaScript
+        // unsafe-inline: يسمح بكتابة JavaScript مباشرة في HTML
+        // unsafe-eval: يسمح باستخدام eval() وما شابه
         scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+
+        // styleSrc: يحدد من أين يمكن تحميل ملفات CSS
+        // unsafe-inline: يسمح بكتابة CSS مباشرة في HTML
         styleSrc: ["'self'", "'unsafe-inline'"],
       },
     },
+
+    // تعطيل سياسة تضمين الموارد عبر النطاقات المختلفة
+    // هذا مفيد عندما تحتاج لتضمين محتوى من مواقع خارجية
     crossOriginEmbedderPolicy: false,
+
+    // السماح بالوصول للموارد من نطاقات مختلفة
+    // cross-origin يسمح لأي موقع خارجي بالوصول إلى موارد الخادم
     crossOriginResourcePolicy: { policy: "cross-origin" },
   })
 );

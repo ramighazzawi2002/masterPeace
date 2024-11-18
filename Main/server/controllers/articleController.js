@@ -14,7 +14,9 @@ const getArticles = async (req, res) => {
           { title: { [Op.iLike]: `%${search}%` } },
           { content: { [Op.iLike]: `%${search}%` } },
         ],
+        is_approved: true,
       },
+
       limit,
       offset,
       order: [["createdAt", "DESC"]],
@@ -163,6 +165,16 @@ const updateArticle = async (req, res) => {
   }
 };
 
+const deleteArticle = async (req, res) => {
+  try {
+    await Article.destroy({ where: { id: req.params.id } });
+    res.json({ message: "Article deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting article:", error);
+    res.status(500).json({ message: "Error deleting article" });
+  }
+};
+
 module.exports = {
   getArticles,
   getArticleWithComments,
@@ -172,4 +184,5 @@ module.exports = {
   addArticle,
   getArticleByUserID,
   updateArticle,
+  deleteArticle,
 };

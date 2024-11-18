@@ -98,7 +98,7 @@ const OverviewTab = ({
       />
       <StatCard
         icon={FiTrendingUp}
-        title="إجمالي المبيعات"
+        title="إجمالي عمولات المنصة"
         value={`${dashboardStats.totalAmount} د.أ`}
         change={dashboardStats.amountGrowth}
         loading={loading}
